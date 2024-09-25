@@ -1,0 +1,15 @@
+.headline {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 15px;
+}
+.headline img {
+  width: 50px;
+  border: 1px solid #f9f6f6;
+}
+.countryName {
+  font-size: 24px;
+  font-weight: 700;
+}

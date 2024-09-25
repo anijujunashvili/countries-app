@@ -1,0 +1,17 @@
+.headerContainer {
+  width: 100%;
+  box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.15);
+
+  border-bottom: 1px solid #eeebeb;
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+  height: 80px;
+  align-items: center;
+}

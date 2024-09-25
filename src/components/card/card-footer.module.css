@@ -1,0 +1,18 @@
+.cardFooter {
+  padding: 10px 15px;
+}
+
+.readMore {
+  padding: 15px 30px;
+  background-color: #7a9f79;
+  border-radius: 4px;
+  border: 0px;
+  cursor: pointer;
+  color: #fff;
+  transition: all 0.6s ease;
+  font-weight: 700;
+}
+
+.readMore:hover {
+  background-color: #315a39;
+}
