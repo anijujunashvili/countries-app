@@ -1,5 +1,5 @@
-import countryFlag from "../../assets/flag.png";
-import styles from "./card-content.module.css";
+import countryFlag from "@/assets/flag.png";
+import styles from "c/card/card-content/card-content.module.css";
 
 type CardContentProps = {
   name: string;
@@ -7,7 +7,7 @@ type CardContentProps = {
   capital: string;
 };
 
-const CardContent = (props: CardContentProps) => {
+export const CardContent = (props: CardContentProps) => {
   return (
     <>
       <div className={styles.headline}>
@@ -23,5 +23,3 @@ const CardContent = (props: CardContentProps) => {
     </>
   );
 };
-
-export default CardContent;

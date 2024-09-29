@@ -1,16 +1,12 @@
-import styles from "./hero.module.css";
+import styles from "c/hero/hero.module.css";
 
-type HeroProps = {
-  heroText: string;
-};
-
-const Hero = (props: HeroProps) => {
+export const Hero: React.FC<{ heroText: string }> = ({ heroText }) => {
   return (
     <>
       <div className={styles.hero}>
         <div className={styles.heroInfo}>
           <div className={styles.text}>
-            {props.heroText}
+            {heroText}
             <br />
             <button>Book Now</button>
           </div>
@@ -19,5 +15,3 @@ const Hero = (props: HeroProps) => {
     </>
   );
 };
-
-export default Hero;

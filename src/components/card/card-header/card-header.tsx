@@ -1,5 +1,5 @@
-import cardImage from "../../assets/card.jpg";
-import styles from "./card-header.module.css";
+import cardImage from "@/assets/card.jpg";
+import styles from "c/card/card-header/card-header.module.css";
 
 const CardHeader: React.FC = () => {
   return (

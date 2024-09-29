@@ -1,10 +1,9 @@
-import Header from "./components/header/Header.tsx";
-import Hero from "./components/hero/Hero.tsx";
-import Card from "./components/card/Card.tsx";
-import CardHeader from "./components/card/CardHeader.tsx";
-import CardFooter from "./components/card/CardFooter.tsx";
-import CardContent from "./components/card/CardContent.tsx";
-import Footer from "./components/footer/Footer.tsx";
+import { Layout } from "c/layout";
+import { Hero } from "c/hero";
+import { Card } from "c/card/card";
+import CardHeader from "~/src/components/card/card-header";
+import { CardFooter } from "@/components/card/card-footer";
+import { CardContent } from "@/components/card/card-content";
 
 const App: React.FC = () => {
   const text: string = `Traveling… It is more than therapy. It is the perfect medicine!
@@ -20,18 +19,18 @@ const App: React.FC = () => {
   };
   return (
     <>
-      <Header />
-      <Hero heroText={text} />
-      <Card>
-        <CardHeader />
-        <CardContent
-          name={country.name}
-          population={country.population}
-          capital={country.capital}
-        />
-        <CardFooter />
-      </Card>
-      <Footer />
+      <Layout>
+        <Hero heroText={text} />
+        <Card>
+          <CardHeader />
+          <CardContent
+            name={country.name}
+            population={country.population}
+            capital={country.capital}
+          />
+          <CardFooter />
+        </Card>
+      </Layout>
     </>
   );
 };

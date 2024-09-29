@@ -1,4 +1,4 @@
-import styles from "./header-menu.module.css";
+import styles from "c/header/header-menu/header-menu.module.css";
 
 const HeaderMenu: React.FC = () => {
   return (

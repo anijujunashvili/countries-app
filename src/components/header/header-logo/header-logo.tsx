@@ -1,4 +1,4 @@
-import styles from "./header-logo.module.css";
+import styles from "c/header/header-logo/header-logo.module.css";
 
 const HeaderLogo: React.FC = () => {
   return (

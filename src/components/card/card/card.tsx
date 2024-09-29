@@ -1,7 +1,7 @@
-import styles from "./card.module.css";
+import styles from "c/card/card/card.module.css";
 import { PropsWithChildren } from "react";
 
-const Card: React.FC<PropsWithChildren> = ({ children }) => {
+export const Card: React.FC<PropsWithChildren> = ({ children }) => {
   return (
     <>
       <div className={styles.cardContainer}>
@@ -10,5 +10,3 @@ const Card: React.FC<PropsWithChildren> = ({ children }) => {
     </>
   );
 };
-
-export default Card;

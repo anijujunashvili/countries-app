@@ -1,6 +1,6 @@
-import styles from "./footer.module.css";
+import styles from "c/footer/footer.module.css";
 
-const Footer: React.FC = () => {
+export const Footer: React.FC = () => {
   return (
     <>
       <div className={styles.footerContainer}>
@@ -11,5 +11,3 @@ const Footer: React.FC = () => {
     </>
   );
 };
-
-export default Footer;
