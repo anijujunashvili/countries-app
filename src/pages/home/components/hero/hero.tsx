@@ -1,6 +1,6 @@
-import styles from "c/hero/hero.module.css";
+import styles from "@/pages/home/components/hero/hero.module.css";
 
-export const Hero: React.FC<{ heroText: string }> = ({ heroText }) => {
+const Hero: React.FC<{ heroText: string }> = ({ heroText }) => {
   return (
     <>
       <div className={styles.hero}>
@@ -15,3 +15,5 @@ export const Hero: React.FC<{ heroText: string }> = ({ heroText }) => {
     </>
   );
 };
+
+export default Hero;

@@ -1,13 +1,15 @@
 import { Header } from "c/header/header";
 import { Footer } from "c/footer";
-import { PropsWithChildren } from "react";
+import { Outlet } from "react-router-dom";
 
-export const Layout: React.FC<PropsWithChildren> = ({ children }) => {
+const Layout = () => {
   return (
     <>
       <Header />
-      {children}
+      <Outlet />
       <Footer />
     </>
   );
 };
+
+export default Layout;

@@ -1,6 +1,6 @@
-import styles from "c/card/card-footer/card-footer.module.css";
+import styles from "@/pages/home/components/card/card-footer/card-footer.module.css";
 
-export const CardFooter: React.FC = () => {
+const CardFooter: React.FC = () => {
   return (
     <>
       <div className={styles.cardFooter}>
@@ -9,3 +9,5 @@ export const CardFooter: React.FC = () => {
     </>
   );
 };
+
+export default CardFooter;

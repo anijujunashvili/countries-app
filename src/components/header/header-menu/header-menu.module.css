@@ -8,7 +8,10 @@
 .navbar li {
   float: left;
 }
-
+.navbar li .activeMenu {
+  color: green;
+  font-weight: 700;
+}
 .navbar li a {
   display: block;
   color: #444343;
