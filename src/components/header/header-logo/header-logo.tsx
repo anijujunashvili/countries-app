@@ -5,8 +5,8 @@ const HeaderLogo: React.FC = () => {
   return (
     <Link to="/" className={styles.logoLink}>
       <div className={styles.logo}>
-        <span className={styles.visit}>Visit</span>
-        <span className={styles.italy}>Italy</span>
+        <span className={styles.visit}>Travel</span>
+        <span className={styles.italy}>Agency</span>
       </div>
     </Link>
   );

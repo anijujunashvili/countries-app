@@ -11,3 +11,36 @@ p {
   color: #2e2c2c;
   text-align: left;
 }
+h1 {
+  color: #736e6e;
+}
+.form-container {
+  width: 70%;
+  margin-left: auto;
+  margin-right: auto;
+}
+input[type="text"],
+select,
+textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  margin-top: 6px;
+  margin-bottom: 16px;
+  resize: vertical;
+}
+
+button {
+  background-color: #7a9f79;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #315a39;
+}

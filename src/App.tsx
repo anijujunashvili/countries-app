@@ -1,5 +1,6 @@
 import Layout from "@/layout/default";
 import { HomePageView } from "@/pages/home/views/home-page-view.tsx";
+import CountryInfoView from "@/pages/home/views/country-info-view";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AboutPageView from "@/pages/about/views/about-page-view.tsx";
 import ContactPageView from "@/pages/contact/views/contact-page-view.tsx";
@@ -21,6 +22,8 @@ const App: React.FC = () => {
                 </Suspense>
               }
             />
+            <Route path="countries" element={<HomePageView />} />
+            <Route path="/countries/:id" element={<CountryInfoView />} />
             <Route path="about" element={<AboutPageView />} />
             <Route path="contact" element={<ContactPageView />} />
           </Route>

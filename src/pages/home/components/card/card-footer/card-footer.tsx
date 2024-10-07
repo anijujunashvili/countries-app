@@ -1,10 +1,13 @@
 import styles from "@/pages/home/components/card/card-footer/card-footer.module.css";
+import { Link } from "react-router-dom";
 
-const CardFooter: React.FC = () => {
+const CardFooter: React.FC<{ countryId: string }> = (props) => {
   return (
     <>
       <div className={styles.cardFooter}>
-        <button className={styles.readMore}>Read more</button>
+        <Link to={`/countries/${props.countryId}`}>
+          <button className={styles.readMore}>Read more</button>
+        </Link>
       </div>
     </>
   );

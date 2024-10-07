@@ -1,26 +1,58 @@
 import "./contact-page.css";
 
-function ContactPageView() {
+const ContactPageView: React.FC = () => {
+  const handleSubmit = (event: HTMLFormElement) => {
+    const formData = new FormData(event.currentTarget);
+    event.preventDefault();
+
+    const form_obj = {
+      first_name: formData.get("first_name"),
+      last_name: formData.get("last_name"),
+      email: formData.get("email"),
+      message: formData.get("message"),
+    };
+
+    console.log(form_obj);
+  };
+
+  const handleKeyDown = (e: HTMLFormElement) => {
+    //dziritadi davalebis meore punqts kargad ver mivxvi da amitom davwere es usargeblo funqcia :D
+    // anu ideashi am funqciis gareShec ilogeboda enterze xelis dacherit, magram asec davwere
+    if (e.key === "Enter") {
+      const formData = new FormData(e.currentTarget);
+
+      const form_obj = {
+        first_name: formData.get("first_name"),
+        last_name: formData.get("last_name"),
+        email: formData.get("email"),
+        message: formData.get("message"),
+      };
+      console.log(form_obj);
+    }
+  };
+
   return (
     <>
       <div className="contact-page-container">
         <div className="contact-page">
           <h1>This is Contact Page</h1>
-          <p>
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry. Lorem Ipsum has been the industry's standard dummy text
-            ever since the 1500s, when an unknown printer took a galley of type
-            and scrambled it to make a type specimen book. It has survived not
-            only five centuries, but also the leap into electronic typesetting,
-            remaining essentially unchanged. It was popularised in the 1960s
-            with the release of Letraset sheets containing Lorem Ipsum passages,
-            and more recently with desktop publishing software like Aldus
-            PageMaker including versions of Lorem Ipsum.
-          </p>
+          <div className="form-container">
+            <form onSubmit={handleSubmit} onKeyDown={handleKeyDown}>
+              <label htmlFor="first_name">First Name</label>
+              <input type="text" name="first_name" placeholder="First name" />
+              <label htmlFor="last_name">Last Name</label>
+              <input type="text" name="last_name" placeholder="Last name" />
+              <label htmlFor="email">Email</label>
+              <input type="text" name="email" placeholder="Email" />
+              <label htmlFor="message">Message</label>
+              <textarea name="message" placeholder="Message..."></textarea>
+              <button type="submit">Send</button>
+            </form>
+          </div>
         </div>
       </div>
     </>
   );
-}
+};
 
 export default ContactPageView;

@@ -10,8 +10,8 @@ const HeaderMenu: React.FC = () => {
   return (
     <ul className={styles.navbar}>
       <li>
-        <NavLink className={ActiveMenu} to="/">
-          Home
+        <NavLink className={ActiveMenu} to="countries">
+          Countries
         </NavLink>
       </li>
       <li>

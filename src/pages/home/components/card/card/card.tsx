@@ -4,9 +4,7 @@ import { PropsWithChildren } from "react";
 const Card: React.FC<PropsWithChildren> = ({ children }) => {
   return (
     <>
-      <div className={styles.cardContainer}>
-        <div className={styles.card}>{children}</div>
-      </div>
+      <div className={styles.card}>{children}</div>
     </>
   );
 };
