@@ -15,29 +15,13 @@ const ContactPageView: React.FC = () => {
     console.log(form_obj);
   };
 
-  const handleKeyDown = (e: HTMLFormElement) => {
-    //dziritadi davalebis meore punqts kargad ver mivxvi da amitom davwere es usargeblo funqcia :D
-    // anu ideashi am funqciis gareShec ilogeboda enterze xelis dacherit, magram asec davwere
-    if (e.key === "Enter") {
-      const formData = new FormData(e.currentTarget);
-
-      const form_obj = {
-        first_name: formData.get("first_name"),
-        last_name: formData.get("last_name"),
-        email: formData.get("email"),
-        message: formData.get("message"),
-      };
-      console.log(form_obj);
-    }
-  };
-
   return (
     <>
       <div className="contact-page-container">
         <div className="contact-page">
           <h1>This is Contact Page</h1>
           <div className="form-container">
-            <form onSubmit={handleSubmit} onKeyDown={handleKeyDown}>
+            <form onSubmit={handleSubmit}>
               <label htmlFor="first_name">First Name</label>
               <input type="text" name="first_name" placeholder="First name" />
               <label htmlFor="last_name">Last Name</label>
