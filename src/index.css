@@ -10,7 +10,35 @@ body {
   margin-left: auto;
   margin-right: auto;
   display: flex;
+  flex-wrap: wrap;
   flex-direction: row;
   align-items: center;
   margin-top: 30px;
+}
+.disabled {
+  position: absolute;
+  width: 281px;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  height: 100%;
+  border-radius: 5px;
+}
+
+.restore {
+  margin-top: 50%;
+  background-color: #7a9f79;
+  color: white;
+  border-radius: 5px;
+  text-align: center;
+  padding: 15px;
+  width: 50%;
+  margin-left: auto;
+  margin-right: auto;
+  box-shadow: 0 8px 16px 0 rgba(1, 1, 1, 0.2), 0 6px 20px 0 rgba(1, 1, 1, 0.19);
+  transition: all 0.6s ease;
+  font-weight: 700;
+}
+.restore:hover {
+  background-color: #315a39;
 }

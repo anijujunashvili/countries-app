@@ -1,5 +1,7 @@
 .cardFooter {
   padding: 10px 15px;
+  display: flex;
+  justify-content: space-between;
 }
 
 .readMore {
@@ -15,4 +17,12 @@
 
 .readMore:hover {
   background-color: #315a39;
+}
+.delete {
+  background-color: rgb(156, 38, 38);
+  padding: 15px 30px;
+  font-weight: 700;
+}
+.delete:hover {
+  background-color: rgb(98, 10, 10);
 }
