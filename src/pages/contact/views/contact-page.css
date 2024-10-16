@@ -44,3 +44,6 @@ button {
 button:hover {
   background-color: #315a39;
 }
+.errorMsg {
+  text-align: left;
+}
