@@ -27,14 +27,11 @@ export const HomePageView = () => {
     dispatch({ type: "sort", payload: { sortType } });
   };
 
-  const handleNewCountry = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const countryFields: any = {};
-    const formData = new FormData(e.currentTarget);
-
-    for (const [key, value] of formData) {
-      countryFields[key] = value;
-    }
+  const handleNewCountry = (countryFields: {
+    name: string;
+    capital: string;
+    population: string;
+  }) => {
     dispatch({ type: "add", payload: { countryFields } });
   };
 
