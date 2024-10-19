@@ -1,4 +1,4 @@
-import { lazy, useReducer, useState } from "react";
+import { lazy, useReducer } from "react";
 import { useParams } from "react-router-dom";
 import initialState from "../components/card/reducer/state.ts";
 import { heroText } from "@/translation/global.ts";
@@ -19,9 +19,9 @@ const LazyCardFooter = lazy(
 );
 
 export const HomePageView = () => {
-  const { lang } = useParams();
   const [countriesList, dispatch] = useReducer(countryReducer, initialState);
 
+  const { lang } = useParams();
   const handleVoteUp = (id: string) => {
     dispatch({ type: "upvote", payload: { id } });
   };
