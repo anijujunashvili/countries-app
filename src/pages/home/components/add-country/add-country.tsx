@@ -1,6 +1,8 @@
 import { ChangeEvent, useState } from "react";
 import { FormEvent } from "react";
 import "./add-country.css";
+import { addCountry } from "@/translation/global.ts";
+import { useParams } from "react-router-dom";
 
 type CountryCreateProps = {
   onCountryCreate: (countryFields: {
@@ -23,7 +25,7 @@ const AddCountry: React.FC<CountryCreateProps> = ({ onCountryCreate }) => {
     nameErrorMsg: "",
     populationErrorMsg: "",
   });
-
+  const { lang } = useParams();
   const toggleModal = () => {
     setModal(!modal);
   };
@@ -36,8 +38,7 @@ const AddCountry: React.FC<CountryCreateProps> = ({ onCountryCreate }) => {
 
   const handleChangeName = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    const error =
-      value.length < 5 ? "Country name must be longer than 5 characters" : "";
+    const error = value.length < 5 ? addCountry[lang].errors.name : "";
     setErrorMsgs({
       nameErrorMsg: error,
       capitalErrorMsg: errorMsgs.capitalErrorMsg,
@@ -51,10 +52,7 @@ const AddCountry: React.FC<CountryCreateProps> = ({ onCountryCreate }) => {
   };
   const handleChangeCapital = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    const error =
-      value.length < 4
-        ? "Country capital must be longer than 4 characters"
-        : "";
+    const error = value.length < 4 ? addCountry[lang].errors.capital : "";
     setErrorMsgs({
       nameErrorMsg: errorMsgs.nameErrorMsg,
       capitalErrorMsg: error,
@@ -68,10 +66,7 @@ const AddCountry: React.FC<CountryCreateProps> = ({ onCountryCreate }) => {
   };
   const handleChangePopulation = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    const error =
-      value.length < 5
-        ? "Country population must be longer than 7 characters"
-        : "";
+    const error = value.length < 5 ? addCountry[lang].errors.population : "";
     setErrorMsgs({
       nameErrorMsg: errorMsgs.nameErrorMsg,
       capitalErrorMsg: errorMsgs.capitalErrorMsg,
@@ -95,21 +90,21 @@ const AddCountry: React.FC<CountryCreateProps> = ({ onCountryCreate }) => {
   return (
     <>
       <button onClick={toggleModal} className="btn-modal">
-        Add Country
+        {addCountry[lang].addCountry}
       </button>
 
       {modal && (
         <div className="modal">
           <div onClick={toggleModal} className="overlay"></div>
           <div className="modal-content">
-            <h2>Add country</h2>
+            <h2>{addCountry[lang].addCountry}</h2>
             <form onSubmit={handleSubmit}>
               <input
                 style={{ marginBottom: "0px" }}
                 type="text"
                 name="name"
                 value={inputValues.name}
-                placeholder="Country name"
+                placeholder={addCountry[lang].name}
                 onChange={handleChangeName}
               />
               <p className="errorMsg">{errorMsgs.nameErrorMsg}</p>
@@ -118,7 +113,7 @@ const AddCountry: React.FC<CountryCreateProps> = ({ onCountryCreate }) => {
                 type="text"
                 name="capital"
                 value={inputValues.capital}
-                placeholder="The capital"
+                placeholder={addCountry[lang].capital}
                 onChange={handleChangeCapital}
               />
               <p className="errorMsg">{errorMsgs.capitalErrorMsg}</p>
@@ -127,11 +122,11 @@ const AddCountry: React.FC<CountryCreateProps> = ({ onCountryCreate }) => {
                 type="text"
                 name="population"
                 value={inputValues.population}
-                placeholder="Country population"
+                placeholder={addCountry[lang].population}
                 onChange={handleChangePopulation}
               />
               <p className="errorMsg">{errorMsgs.populationErrorMsg}</p>
-              <button type="submit">Add</button>
+              <button type="submit">{addCountry[lang].add}</button>
             </form>
             <button className="close-modal" onClick={toggleModal}>
               X

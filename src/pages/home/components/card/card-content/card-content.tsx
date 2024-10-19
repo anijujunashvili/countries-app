@@ -1,5 +1,7 @@
 import styles from "@/pages/home/components/card/card-content/card-content.module.css";
 import likeIcon from "@/assets/like.jpg";
+import { common } from "@/translation/global.ts";
+import { useParams } from "react-router-dom";
 
 const CardContent: React.FC<{
   name: string;
@@ -9,6 +11,7 @@ const CardContent: React.FC<{
   vote: number;
   onUpVote: () => void;
 }> = ({ name, population, capital, flag, vote, onUpVote }) => {
+  const { lang } = useParams();
   return (
     <>
       <div className={styles.headline}>
@@ -17,7 +20,7 @@ const CardContent: React.FC<{
           <img
             src={likeIcon}
             onClick={onUpVote}
-            title="Vote up"
+            title={common[lang].vote_up}
             style={{
               width: "30px",
               verticalAlign: "bottom",
@@ -30,10 +33,10 @@ const CardContent: React.FC<{
         <img src={`/src/assets/${flag}`} alt="flag" title="Flag"></img>
       </div>
       <div className={population}>
-        Population: <span>{population}</span>
+        {common[lang].population}: <span>{population}</span>
       </div>
       <div className={capital}>
-        The capital: <span>{capital}</span>
+        {common[lang].capital}: <span>{capital}</span>
       </div>
     </>
   );

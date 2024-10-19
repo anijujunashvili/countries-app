@@ -1,8 +1,10 @@
-import { lazy, useReducer } from "react";
+import { lazy, useReducer, useState } from "react";
+import { useParams } from "react-router-dom";
 import initialState from "../components/card/reducer/state.ts";
-import heroText from "../static/hero_text";
+import { heroText } from "@/translation/global.ts";
 import AddCountry from "../components/add-country/add-country";
 import countryReducer from "../components/card/reducer/reducer.ts";
+import { common } from "@/translation/global.ts";
 
 const LazyHero = lazy(() => import("@/pages/home/components/hero"));
 const LazyCard = lazy(() => import("@/pages/home/components/card/card"));
@@ -17,6 +19,7 @@ const LazyCardFooter = lazy(
 );
 
 export const HomePageView = () => {
+  const { lang } = useParams();
   const [countriesList, dispatch] = useReducer(countryReducer, initialState);
 
   const handleVoteUp = (id: string) => {
@@ -45,19 +48,21 @@ export const HomePageView = () => {
 
   return (
     <>
-      <LazyHero heroText={heroText} />
+      <LazyHero heroText={heroText[lang]} />
       <div className="container">
         <button
           onClick={() => handleSort("asc")}
           style={{ marginRight: "15px" }}
         >
-          Sort by asc
+          {common[lang].sort_asc}
         </button>
-        <button onClick={() => handleSort("desc")}>Sort by desc</button>
+        <button onClick={() => handleSort("desc")}>
+          {common[lang].sort_desc}
+        </button>
         <AddCountry onCountryCreate={handleNewCountry} />
       </div>
       <div className="container">
-        {countriesList
+        {countriesList[lang]
           .sort((a, b) => {
             return a.disabled - b.disabled;
           })
@@ -69,7 +74,7 @@ export const HomePageView = () => {
                     className="restore"
                     onClick={() => handleDeletedCountry(country_item.id)}
                   >
-                    Restore
+                    {common[lang].restore}
                   </div>
                 </div>
               ) : (

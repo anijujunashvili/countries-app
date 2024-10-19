@@ -1,9 +1,10 @@
 import { useParams } from "react-router-dom";
-import countries from "../static/countries-data";
+import initialState from "@/pages/home/components/card/reducer/state.ts";
 
 function CountryInfoView() {
-  const { id } = useParams();
-  const countryInfo = countries.find((country) => country.id == id);
+  const { id, lang } = useParams();
+
+  const countryInfo = initialState[lang].find((country) => country.id == id);
 
   if (!countryInfo) {
     return <h1>Country not found!</h1>;

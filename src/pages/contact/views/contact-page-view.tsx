@@ -1,5 +1,7 @@
 import { ChangeEvent, FormEvent, useState } from "react";
 import "./contact-page.css";
+import { contact } from "@/translation/global.ts";
+import { useParams } from "react-router-dom";
 
 const ContactPageView: React.FC = () => {
   const [inputValues, setinputValues] = useState({
@@ -15,6 +17,8 @@ const ContactPageView: React.FC = () => {
     messageError: "",
   });
 
+  const { lang } = useParams();
+
   const handleSubmit = (event: HTMLFormElement) => {
     event.preventDefault();
 
@@ -29,7 +33,7 @@ const ContactPageView: React.FC = () => {
 
   const handleFnameValidation = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    const error = value.length < 4 ? "First name error" : "";
+    const error = value.length < 4 ? contact[lang].errors.fname_e : "";
 
     setErrorMsgs({
       fnameError: error,
@@ -48,7 +52,7 @@ const ContactPageView: React.FC = () => {
 
   const handleLnameValidation = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    const error = value.length < 4 ? "Last name error" : "";
+    const error = value.length < 4 ? contact[lang].errors.lname_e : "";
 
     setErrorMsgs({
       fnameError: errorMsgs.fnameError,
@@ -67,7 +71,7 @@ const ContactPageView: React.FC = () => {
 
   const handleEmailValidation = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    const error = value.length < 10 ? "email error" : "";
+    const error = value.length < 10 ? contact[lang].errors.email_e : "";
 
     setErrorMsgs({
       fnameError: errorMsgs.fnameError,
@@ -85,7 +89,7 @@ const ContactPageView: React.FC = () => {
 
   const handleMsgValidation = (e: FormEvent<HTMLTextAreaElement>) => {
     const value = e.target.value;
-    const error = value.length < 20 ? "Message error" : "";
+    const error = value.length < 20 ? contact[lang].errors.message_e : "";
 
     setErrorMsgs({
       fnameError: errorMsgs.fnameError,
@@ -105,47 +109,47 @@ const ContactPageView: React.FC = () => {
     <>
       <div className="contact-page-container">
         <div className="contact-page">
-          <h1>This is Contact Page</h1>
+          <h1>{contact[lang].headline}</h1>
           <div className="form-container">
             <form onSubmit={handleSubmit}>
-              <label htmlFor="first_name">First Name</label>
+              <label htmlFor="first_name">{contact[lang].fname}</label>
               <input
                 type="text"
                 name="first_name"
-                placeholder="First name"
+                placeholder={contact[lang].fname}
                 value={inputValues.fname}
                 onChange={handleFnameValidation}
               />
               <p className="errorMsg">{errorMsgs.fnameError}</p>
-              <label htmlFor="last_name">Last Name</label>
+              <label htmlFor="last_name">{contact[lang].lname}</label>
               <input
                 type="text"
                 name="last_name"
-                placeholder="Last name"
+                placeholder={contact[lang].lname}
                 value={inputValues.lname}
                 onChange={handleLnameValidation}
               />
               <p className="errorMsg">{errorMsgs.lnameError}</p>
-              <label htmlFor="email">Email</label>
+              <label htmlFor="email">{contact[lang].email}</label>
               <input
                 type="text"
                 name="email"
-                placeholder="Email"
+                placeholder={contact[lang].email}
                 value={inputValues.email}
                 onChange={handleEmailValidation}
               />
               <p className="errorMsg">{errorMsgs.emailError}</p>
-              <label htmlFor="message">Message</label>
+              <label htmlFor="message">{contact[lang].message}</label>
               <textarea
                 name="message"
-                placeholder="Message..."
+                placeholder={contact[lang].message}
                 value={inputValues.message}
                 onChange={handleMsgValidation}
               >
                 {inputValues.message}
               </textarea>
               <p className="errorMsg">{errorMsgs.messageError}</p>
-              <button type="submit">Send</button>
+              <button type="submit">{contact[lang].send}</button>
             </form>
           </div>
         </div>
