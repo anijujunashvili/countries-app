@@ -20,14 +20,17 @@ const LazyCardFooter = lazy(
 
 export const HomePageView = () => {
   const [countriesList, dispatch] = useReducer(countryReducer, initialState);
-
   const { lang } = useParams();
+
   const handleVoteUp = (id: string) => {
-    dispatch({ type: "upvote", payload: { id } });
+    dispatch({ type: "upvote", payload: { id, initial: initialState, lang } });
   };
 
   const handleSort = (sortType: "asc" | "desc") => {
-    dispatch({ type: "sort", payload: { sortType } });
+    dispatch({
+      type: "sort",
+      payload: { sortType, initial: initialState, lang },
+    });
   };
 
   const handleNewCountry = (countryFields: {
@@ -35,16 +38,18 @@ export const HomePageView = () => {
     capital: string;
     population: string;
   }) => {
-    dispatch({ type: "add", payload: { countryFields } });
+    dispatch({ type: "add", payload: { countryFields, lang } });
   };
 
   const handleDeleteCountry = (id: string) => {
-    dispatch({ type: "delete", payload: { id } });
+    dispatch({ type: "delete", payload: { id, initial: initialState, lang } });
   };
 
   const handleDeletedCountry = (id: string) => {
-    dispatch({ type: "restore", payload: { id } });
+    dispatch({ type: "restore", payload: { id, initial: initialState, lang } });
   };
+
+  const new_object = countriesList[lang] ? countriesList[lang] : countriesList;
 
   return (
     <>
@@ -62,7 +67,7 @@ export const HomePageView = () => {
         <AddCountry onCountryCreate={handleNewCountry} />
       </div>
       <div className="container">
-        {countriesList[lang]
+        {new_object
           .sort((a, b) => {
             return a.disabled - b.disabled;
           })

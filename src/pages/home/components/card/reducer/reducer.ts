@@ -16,9 +16,12 @@ type Action = {
 
 const countryReducer = (countriesList: counrtiesListState, action: Action) => {
   if (action.type === "upvote") {
-    const newCountryObject = countriesList.map((country) => {
+    const lang = action.payload.lang;
+    const obj = countriesList[lang] ? countriesList[lang] : countriesList;
+
+    const newCountryObject = obj.map((country) => {
       if (country.id === action.payload.id) {
-        return { ...country, vote: country.vote + 1 };
+        return { ...country, vote: String(Number(country.vote) + 1) };
       }
 
       return { ...country };
@@ -26,7 +29,10 @@ const countryReducer = (countriesList: counrtiesListState, action: Action) => {
     return newCountryObject;
   }
   if (action.type === "sort") {
-    const sortedData = [...countriesList].sort((a, b) => {
+    const lang = action.payload.lang;
+    const obj = countriesList[lang] ? countriesList[lang] : countriesList;
+
+    const sortedData = [...obj].sort((a, b) => {
       if (!a.disabled && !b.disabled) {
         return action.payload.sortType === "asc"
           ? a.vote - b.vote
@@ -54,13 +60,16 @@ const countryReducer = (countriesList: counrtiesListState, action: Action) => {
     return newCountriesList;
   }
   if (action.type === "delete") {
-    const newCountryObject = countriesList.map((country) => {
+    const lang = action.payload.lang;
+    const obj = countriesList[lang] ? countriesList[lang] : countriesList;
+    const newCountryObject = obj.map((country) => {
       if (country.id === action.payload.id) {
         return { ...country, disabled: 1 };
       }
 
       return { ...country };
     });
+
     return newCountryObject;
   }
 
