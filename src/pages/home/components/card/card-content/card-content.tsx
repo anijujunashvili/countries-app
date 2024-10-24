@@ -2,7 +2,7 @@ import styles from "@/pages/home/components/card/card-content/card-content.modul
 import likeIcon from "@/assets/like.jpg";
 import { common } from "@/translation/global.ts";
 import { useParams } from "react-router-dom";
-
+console.log(34);
 const CardContent: React.FC<{
   name: string;
   population: string;
@@ -15,7 +15,7 @@ const CardContent: React.FC<{
   return (
     <>
       <div className={styles.headline}>
-        <span className={styles.countryName}>{name}</span>
+        <span className={styles.countryName}>{name[lang]}</span>
         <span>
           <img
             src={likeIcon}
@@ -36,7 +36,7 @@ const CardContent: React.FC<{
         {common[lang].population}: <span>{population}</span>
       </div>
       <div className={capital}>
-        {common[lang].capital}: <span>{capital}</span>
+        {common[lang].capital}: <span>{capital[lang]}</span>
       </div>
     </>
   );

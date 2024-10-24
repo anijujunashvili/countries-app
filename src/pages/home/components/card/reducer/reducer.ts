@@ -4,7 +4,7 @@ type counrtiesListState = {
   capital: string;
   population: string;
   flag: string;
-  cover: string;
+  image: string;
   intro: string;
   vote: number;
 };
@@ -43,17 +43,31 @@ const countryReducer = (countriesList: counrtiesListState, action: Action) => {
     return sortedData;
   }
   if (action.type === "add") {
+    const lang = action.payload.lang;
     const obj = action.payload.countryFields;
-    const imgName = Math.floor(Math.random() * 4) + 1;
+
     const newCountriesList = [
       ...countriesList,
       {
-        ...obj,
-        flag: "no-flag.jpg",
-        cover: `${imgName}.jpg`,
-        vote: 0,
         id: (Number(countriesList.at(-1)?.id) + 1).toString(),
+        name: {
+          ka: obj.name,
+          en: obj.nameEn,
+        },
+        capital: {
+          ka: obj.capital,
+          en: obj.capitalEn,
+        },
+        population: obj.population,
+        flag: "georgia.png",
+        image: obj.image,
+        intro: {
+          ka: `იტალიის დედაქალაქი რომი საუკუნეთა განმავლობაში დასავლური ცივილიზაციის პოლიტიკურ და რელიგიურ ცენტრს წარმოადგენდა, როგორც რომის იმპერიის დედაქალაქი და წმინდა ეპარქიის ადგილსამყოფელი. რომის იმპერიის დაცემის შემდეგ იტალიამ გაუძლო უცხოელ ხალხთა მრავალ ინვანსიას, ძირითადად ისეთი ხალხებისგან როგორებიც იყვნენ გერმანიკული ტომები — ლანგობარდები და ოსტგუთები, შემდეგ ბიზანტიელები, უფრო მოგვიანებით კი ნორმანები და ა. შ. საუკუნეების შემდეგ, იტალია საზღვაო რესპუბლიკებისა და რენესანსის სამშობლო გახდა.[7]`,
+          en: "Iyaly",
+        },
+        vote: 0,
         disabled: 0,
+        uploaded: 1,
       },
     ];
 

@@ -20,6 +20,7 @@ const LazyCardFooter = lazy(
 
 export const HomePageView = () => {
   const [countriesList, dispatch] = useReducer(countryReducer, initialState);
+
   const { lang } = useParams();
 
   const handleVoteUp = (id: string) => {
@@ -35,10 +36,16 @@ export const HomePageView = () => {
 
   const handleNewCountry = (countryFields: {
     name: string;
+    nameEn: string;
     capital: string;
+    capitalEn: string;
     population: string;
+    image: string;
   }) => {
-    dispatch({ type: "add", payload: { countryFields, lang } });
+    dispatch({
+      type: "add",
+      payload: { countryFields, initial: initialState, lang },
+    });
   };
 
   const handleDeleteCountry = (id: string) => {
@@ -67,7 +74,7 @@ export const HomePageView = () => {
         <AddCountry onCountryCreate={handleNewCountry} />
       </div>
       <div className="container">
-        {new_object
+        {countriesList
           .sort((a, b) => {
             return a.disabled - b.disabled;
           })
@@ -85,7 +92,10 @@ export const HomePageView = () => {
               ) : (
                 ""
               )}
-              <LazyCardHeader cover={country_item.cover} />
+              <LazyCardHeader
+                image={country_item.image}
+                uploaded={country_item.uploaded}
+              />
               <LazyCardContent
                 {...country_item}
                 onUpVote={() => handleVoteUp(country_item.id)}

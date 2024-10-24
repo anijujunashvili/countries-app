@@ -78,8 +78,10 @@ export const notFound = {
 export const addCountry = {
   ka: {
     addCountry: "ქვეყნის დამატება",
-    name: "ქვეყნის დასახელება",
-    capital: "დედაქალაქი",
+    name: "ქვეყნის დასახელება ქართულად",
+    nameEn: "ქვეყნის დასახელება ინგლისურად",
+    capital: "დედაქალაქი ქართულად",
+    capitalEn: "დედაქალაქი ინგლისურად",
     population: "მოსახლეობა",
     add: "დამატება",
     errors: {
@@ -91,8 +93,10 @@ export const addCountry = {
   },
   en: {
     addCountry: "Add country",
-    name: "Country name",
-    capital: "The capital",
+    name: "Country name in Georgian",
+    nameEn: "Country name in English",
+    capital: "The capital in Georgian",
+    capitalEn: "The capital in English",
     population: "Population",
     add: "Add",
     errors: {
@@ -137,3 +141,5 @@ export const common = {
     add: "Add",
   },
 };
+export const locales = Object.keys(mainMenu);
+export const defaultLocale = "ka";

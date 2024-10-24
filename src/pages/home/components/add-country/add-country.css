@@ -37,7 +37,7 @@ body.active-modal {
   padding: 14px 28px;
   border-radius: 3px;
   max-width: 600px;
-  min-width: 300px;
+  min-width: 400px;
   z-index: 2;
 }
 
@@ -51,4 +51,20 @@ body.active-modal {
 .errorMsg {
   font-size: 14px;
   color: rgb(156, 38, 38);
+}
+.tabs {
+  padding: 15px 0 25px 0;
+  width: 100%;
+}
+.tabs span {
+  padding: 15px 30px;
+  font-weight: 500;
+  color: black;
+  cursor: pointer;
+  background-color: #fff;
+}
+.tabs .active {
+  background-color: #315a39;
+  color: #f1f1f1;
+  font-weight: 700;
 }
