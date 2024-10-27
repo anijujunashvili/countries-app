@@ -7,8 +7,11 @@ import { useParams } from "react-router-dom";
 type CountryCreateProps = {
   onCountryCreate: (countryFields: {
     name: string;
+    nameEn: string;
     capital: string;
+    capitalEn: string;
     population: string;
+    image: string;
   }) => void;
 };
 
@@ -39,7 +42,10 @@ const AddCountry: React.FC<CountryCreateProps> = ({ onCountryCreate }) => {
     },
     populationErrorMsg: "",
   });
-  const { lang } = useParams();
+
+  const params = useParams();
+  // const lang = params.lang as string;
+  const lng = params.lang as keyof typeof addCountry;
   const toggleModal = () => {
     setModal(!modal);
   };
@@ -54,7 +60,7 @@ const AddCountry: React.FC<CountryCreateProps> = ({ onCountryCreate }) => {
     const value = e.target.value;
     const Inputlang = e.target.lang;
 
-    const error = value.length < 5 ? addCountry[lang].errors.name : "";
+    const error = value.length < 5 ? addCountry[lng].errors.name : "";
 
     setErrorMsgs({
       ka: {
@@ -82,7 +88,7 @@ const AddCountry: React.FC<CountryCreateProps> = ({ onCountryCreate }) => {
   const handleChangeCapital = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     const Inputlang = e.target.lang;
-    const error = value.length < 4 ? addCountry[lang].errors.capital : "";
+    const error = value.length < 4 ? addCountry[lng].errors.capital : "";
     setErrorMsgs({
       ka: {
         nameErrorMsg: errorMsgs.ka.nameErrorMsg,
@@ -110,7 +116,7 @@ const AddCountry: React.FC<CountryCreateProps> = ({ onCountryCreate }) => {
   };
   const handleChangePopulation = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    const error = value.length < 5 ? addCountry[lang].errors.population : "";
+    const error = value.length < 5 ? addCountry[lng].errors.population : "";
     setErrorMsgs({
       ka: {
         nameErrorMsg: errorMsgs.ka.nameErrorMsg,
@@ -161,14 +167,14 @@ const AddCountry: React.FC<CountryCreateProps> = ({ onCountryCreate }) => {
   return (
     <>
       <button onClick={toggleModal} className="btn-modal">
-        {addCountry[lang].addCountry}
+        {addCountry[lng].addCountry}
       </button>
 
       {modal && (
         <div className="modal">
           <div onClick={toggleModal} className="overlay"></div>
           <div className="modal-content">
-            <h2>{addCountry[lang].addCountry}</h2>
+            <h2>{addCountry[lng].addCountry}</h2>
             <div className="tabs">
               <span
                 onClick={() => handleTabsChange("ka")}
@@ -191,7 +197,7 @@ const AddCountry: React.FC<CountryCreateProps> = ({ onCountryCreate }) => {
                     type="text"
                     name="name"
                     value={inputValues.ka.name}
-                    placeholder={addCountry[lang].name}
+                    placeholder={addCountry[lng].name}
                     onChange={handleChangeName}
                     lang="ka"
                   />
@@ -201,7 +207,7 @@ const AddCountry: React.FC<CountryCreateProps> = ({ onCountryCreate }) => {
                     type="text"
                     name="capital"
                     value={inputValues.ka.capital}
-                    placeholder={addCountry[lang].capital}
+                    placeholder={addCountry[lng].capital}
                     onChange={handleChangeCapital}
                     lang="ka"
                   />
@@ -215,7 +221,7 @@ const AddCountry: React.FC<CountryCreateProps> = ({ onCountryCreate }) => {
                     type="text"
                     name="nameEn"
                     value={inputValues.en.name}
-                    placeholder={addCountry[lang].nameEn}
+                    placeholder={addCountry[lng].nameEn}
                     onChange={handleChangeName}
                     lang="en"
                   />
@@ -225,7 +231,7 @@ const AddCountry: React.FC<CountryCreateProps> = ({ onCountryCreate }) => {
                     type="text"
                     name="capitalEn"
                     value={inputValues.en.capital}
-                    placeholder={addCountry[lang].capitalEn}
+                    placeholder={addCountry[lng].capitalEn}
                     onChange={handleChangeCapital}
                     lang="en"
                   />
@@ -238,7 +244,7 @@ const AddCountry: React.FC<CountryCreateProps> = ({ onCountryCreate }) => {
                 type="text"
                 name="population"
                 value={inputValues.population}
-                placeholder={addCountry[lang].population}
+                placeholder={addCountry[lng].population}
                 onChange={handleChangePopulation}
               />
               <p className="errorMsg">{errorMsgs.populationErrorMsg}</p>
@@ -252,7 +258,7 @@ const AddCountry: React.FC<CountryCreateProps> = ({ onCountryCreate }) => {
                   onChange={handleUpload}
                 />
               </p>
-              <button type="submit">{addCountry[lang].add}</button>
+              <button type="submit">{addCountry[lng].add}</button>
             </form>
             <button className="close-modal" onClick={toggleModal}>
               X

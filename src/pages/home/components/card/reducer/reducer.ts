@@ -11,7 +11,7 @@ type counrtiesListState = {
 
 type Action = {
   type: "upvote" | "add" | "sort" | "delete" | "restore";
-  payload: any;
+  payload: object;
 };
 
 const countryReducer = (countriesList: counrtiesListState, action: Action) => {
@@ -43,7 +43,7 @@ const countryReducer = (countriesList: counrtiesListState, action: Action) => {
     return sortedData;
   }
   if (action.type === "add") {
-    const lang = action.payload.lang;
+    // const lang = action.payload.lang;
     const obj = action.payload.countryFields;
 
     const newCountriesList = [

@@ -9,19 +9,21 @@ import { common } from "@/translation/global.ts";
 const LazyHero = lazy(() => import("@/pages/home/components/hero"));
 const LazyCard = lazy(() => import("@/pages/home/components/card/card"));
 const LazyCardContent = lazy(
-  () => import("@/pages/home/components/card/card-content")
+  () => import("@/pages/home/components/card/card-content"),
 );
 const LazyCardHeader = lazy(
-  () => import("@/pages/home/components/card/card-header")
+  () => import("@/pages/home/components/card/card-header"),
 );
 const LazyCardFooter = lazy(
-  () => import("@/pages/home/components/card/card-footer")
+  () => import("@/pages/home/components/card/card-footer"),
 );
 
 export const HomePageView = () => {
   const [countriesList, dispatch] = useReducer(countryReducer, initialState);
 
-  const { lang } = useParams();
+  const params = useParams();
+  const lang = params.lang as string;
+  const lng = params.lang as keyof typeof common;
 
   const handleVoteUp = (id: string) => {
     dispatch({ type: "upvote", payload: { id, initial: initialState, lang } });
@@ -55,30 +57,38 @@ export const HomePageView = () => {
   const handleDeletedCountry = (id: string) => {
     dispatch({ type: "restore", payload: { id, initial: initialState, lang } });
   };
-
-  const new_object = countriesList[lang] ? countriesList[lang] : countriesList;
-
+  type Countries = {
+    id: string;
+    name: string;
+    population: string;
+    flag: string;
+    capital: string;
+    disabled: number;
+    image: string;
+    uploaded: number;
+    vote: number;
+  };
   return (
     <>
-      <LazyHero heroText={heroText[lang]} />
+      <LazyHero heroText={heroText[lng]} />
       <div className="container">
         <button
           onClick={() => handleSort("asc")}
           style={{ marginRight: "15px" }}
         >
-          {common[lang].sort_asc}
+          {common[lng].sort_asc}
         </button>
         <button onClick={() => handleSort("desc")}>
-          {common[lang].sort_desc}
+          {common[lng].sort_desc}
         </button>
         <AddCountry onCountryCreate={handleNewCountry} />
       </div>
       <div className="container">
         {countriesList
-          .sort((a, b) => {
+          .sort((a: Countries, b: Countries) => {
             return a.disabled - b.disabled;
           })
-          .map((country_item) => (
+          .map((country_item: Countries) => (
             <LazyCard key={country_item.id}>
               {country_item.disabled ? (
                 <div className="disabled">
@@ -86,7 +96,7 @@ export const HomePageView = () => {
                     className="restore"
                     onClick={() => handleDeletedCountry(country_item.id)}
                   >
-                    {common[lang].restore}
+                    {common[lng].restore}
                   </div>
                 </div>
               ) : (
