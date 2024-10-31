@@ -26,14 +26,13 @@ export const HomePageView = () => {
   const lng = params.lang as keyof typeof common;
 
   const handleVoteUp = (id: string) => {
-    dispatch({ type: "upvote", payload: { id, initial: initialState, lang } });
+    if (id) {
+      dispatch({ type: "upvote", payload: { id } });
+    }
   };
 
   const handleSort = (sortType: "asc" | "desc") => {
-    dispatch({
-      type: "sort",
-      payload: { sortType, initial: initialState, lang },
-    });
+    dispatch({ type: "sort", payload: { sortType } });
   };
 
   const handleNewCountry = (countryFields: {
@@ -44,25 +43,30 @@ export const HomePageView = () => {
     population: string;
     image: string;
   }) => {
-    dispatch({
-      type: "add",
-      payload: { countryFields, initial: initialState, lang },
-    });
+    dispatch({ type: "add", payload: { countryFields, lang } });
   };
 
   const handleDeleteCountry = (id: string) => {
-    dispatch({ type: "delete", payload: { id, initial: initialState, lang } });
+    dispatch({ type: "delete", payload: { id } });
   };
 
   const handleDeletedCountry = (id: string) => {
-    dispatch({ type: "restore", payload: { id, initial: initialState, lang } });
+    dispatch({ type: "restore", payload: { id } });
+  };
+  type nameType = {
+    ka: string;
+    en: string;
+  };
+  type capitalType = {
+    ka: string;
+    en: string;
   };
   type Countries = {
     id: string;
-    name: string;
+    name: nameType;
     population: string;
     flag: string;
-    capital: string;
+    capital: capitalType;
     disabled: number;
     image: string;
     uploaded: number;

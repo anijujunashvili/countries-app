@@ -1,5 +1,6 @@
 import Layout from "@/layout/default";
 import { HomePageView } from "@/pages/home/views/home-page-view.tsx";
+import OtpPageView from "@/pages/otp/otp";
 import CountryInfoView from "@/pages/home/views/country-info-view";
 import {
   BrowserRouter,
@@ -46,6 +47,7 @@ const App: React.FC = () => {
               <Route path="countries" element={<HomePageView />} />
               <Route path="about" element={<AboutPageView />} />
               <Route path="contact" element={<ContactPageView />} />
+              <Route path="otp" element={<OtpPageView />} />
               <Route path="*" element={<NotFoundPage />} />
             </Route>
           </Route>

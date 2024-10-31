@@ -9,7 +9,8 @@ const CardFooter: React.FC<CardFooterProps> = ({
   countryId,
   DeleteCountry,
 }) => {
-  const { lang } = useParams();
+  const params = useParams();
+  const lang = params.lang as keyof typeof common;
   return (
     <>
       <div className={styles.cardFooter}>

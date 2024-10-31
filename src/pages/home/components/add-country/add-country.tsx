@@ -17,7 +17,7 @@ type CountryCreateProps = {
 
 const AddCountry: React.FC<CountryCreateProps> = ({ onCountryCreate }) => {
   const [modal, setModal] = useState(false);
-  const [image, setImage] = useState();
+  const [image, setImage] = useState<string>("");
   const [tabs, setTabs] = useState({ ka: true, en: false });
 
   const [inputValues, setinputValues] = useState({
@@ -145,15 +145,26 @@ const AddCountry: React.FC<CountryCreateProps> = ({ onCountryCreate }) => {
     const capital = inputValues.ka.capital;
     const capitalEn = inputValues.en.capital;
     const population = inputValues.population;
-    onCountryCreate({ name, nameEn, capital, capitalEn, population, image });
+
+    onCountryCreate({
+      name,
+      nameEn,
+      capital,
+      capitalEn,
+      population,
+      image,
+    });
   };
 
-  const handleUpload = (e: FormEvent) => {
-    const data = new FileReader();
-    data.addEventListener("load", () => {
-      setImage(data.result);
-    });
-    data.readAsDataURL(e.target.files[0]);
+  const handleUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const data = new FileReader();
+      data.addEventListener("load", () => {
+        setImage(data.result as string);
+      });
+      data.readAsDataURL(file);
+    }
   };
 
   const handleTabsChange = (lng: string) => {

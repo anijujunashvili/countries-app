@@ -9,7 +9,8 @@ export const Header = () => {
     return isActive ? styles.activeMenu : styles.inactiveMenu;
   };
 
-  const { lang } = useParams();
+  const params = useParams();
+  const lang = params.lang as keyof typeof mainMenu;
 
   const LangChangeLink = lang == "ka" ? "/en/countries" : "/ka/countries";
 
@@ -39,7 +40,9 @@ export const Header = () => {
             </NavLink>
           </li>
           <li>
-            <a href="contact">{mainMenu[lang].destination}</a>
+            <NavLink className={ActiveMenu} to="otp">
+              OTP
+            </NavLink>
           </li>
           <li>
             <a href="#blog">{mainMenu[lang].blog}</a>

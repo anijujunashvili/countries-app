@@ -17,9 +17,10 @@ const ContactPageView: React.FC = () => {
     messageError: "",
   });
 
-  const { lang } = useParams();
+  const params = useParams();
+  const lang = params.lang as keyof typeof contact;
 
-  const handleSubmit = (event: HTMLFormElement) => {
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const form_obj = {
@@ -32,7 +33,7 @@ const ContactPageView: React.FC = () => {
   };
 
   const handleFnameValidation = (e: ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
+    const value = (e.target as HTMLInputElement).value;
     const error = value.length < 4 ? contact[lang].errors.fname_e : "";
 
     setErrorMsgs({
@@ -51,7 +52,7 @@ const ContactPageView: React.FC = () => {
   };
 
   const handleLnameValidation = (e: ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
+    const value = (e.target as HTMLInputElement).value;
     const error = value.length < 4 ? contact[lang].errors.lname_e : "";
 
     setErrorMsgs({
@@ -70,7 +71,7 @@ const ContactPageView: React.FC = () => {
   };
 
   const handleEmailValidation = (e: ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
+    const value = (e.target as HTMLInputElement).value;
     const error = value.length < 10 ? contact[lang].errors.email_e : "";
 
     setErrorMsgs({
@@ -88,7 +89,7 @@ const ContactPageView: React.FC = () => {
   };
 
   const handleMsgValidation = (e: FormEvent<HTMLTextAreaElement>) => {
-    const value = e.target.value;
+    const value = (e.target as HTMLInputElement).value;
     const error = value.length < 20 ? contact[lang].errors.message_e : "";
 
     setErrorMsgs({

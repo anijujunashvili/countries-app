@@ -3,7 +3,8 @@ import { common } from "@/translation/global";
 import { useParams } from "react-router-dom";
 
 const Hero: React.FC<{ heroText: string }> = ({ heroText }) => {
-  const { lang } = useParams();
+  const params = useParams();
+  const lang = params.lang as keyof typeof common;
   return (
     <>
       <div className={styles.hero}>

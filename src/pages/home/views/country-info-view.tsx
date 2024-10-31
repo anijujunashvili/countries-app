@@ -1,14 +1,41 @@
 import { useParams } from "react-router-dom";
 import initialState from "@/pages/home/components/card/reducer/state.ts";
 
-function CountryInfoView() {
-  const { id, lang } = useParams();
+// type nameType = {
+//   ka: string;
+//   en: string;
+// };
+// type introType = {
+//   ka: string;
+//   en: string;
+// };
+// type capitalType = {
+//   ka: string;
+//   en: string;
+// };
 
+// type countryInfoType = {
+//   id: string;
+//   name: nameType;
+//   capital: capitalType;
+//   population: string;
+//   flag: string;
+//   intro: introType;
+//   image: string;
+//   uploaded?: number;
+//   vote?: number;
+//   disabled: number;
+// };
+
+function CountryInfoView() {
+  const params = useParams();
+  const id = params.id;
   const countryInfo = initialState.find((country) => country.id == id);
 
   if (!countryInfo) {
     return <h1>Country not found!</h1>;
   }
+  const lang = params.lang as keyof typeof countryInfo.name;
 
   const imgPath = countryInfo.uploaded == 0 ? "/src/assets/" : "";
   return (
