@@ -70,13 +70,14 @@ const countryReducer = (
     const obj = countriesList;
 
     if (obj && obj instanceof Array) {
-      const sortedData = countriesList.sort((a, b) => {
-        if (!a.disabled && !b.disabled) {
-          return action.payload.sortType === "asc"
-            ? a.vote - b.vote
-            : b.vote - a.vote;
-        }
+      const sortedData = [...obj].sort((a, b) => {
+        //if (a.disabled !==  && b.disabled !== 0) {
+        return action.payload.sortType === "asc"
+          ? a.vote - b.vote
+          : b.vote - a.vote;
+        // }
       });
+
       console.log(sortedData);
       return sortedData;
     }
