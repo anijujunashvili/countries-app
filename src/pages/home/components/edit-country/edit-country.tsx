@@ -25,6 +25,7 @@ const EditCountry: React.FC<CountryChangeProps> = ({
   const [modal, setModal] = useState(false);
   const [image, setImage] = useState<string>("");
   const [tabs, setTabs] = useState({ ka: true, en: false });
+  console.log(modal);
   const [inputValues, setinputValues] = useState({
     ka: {
       name: "",

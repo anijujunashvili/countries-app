@@ -37,7 +37,7 @@ function CountryInfoView() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3000/countries/${id}`)
+      .get(`http://localhost:3000/countriesList/${id}`)
       .then((res) => {
         setCountryInfo(res.data);
       })
@@ -48,6 +48,7 @@ function CountryInfoView() {
       .finally(() => {
         console.log("finally I am here");
       });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (isError) {
