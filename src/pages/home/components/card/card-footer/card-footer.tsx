@@ -17,6 +17,7 @@ const CardFooter: React.FC<CardFooterProps> = ({
         <Link to={`/${lang}/countries/${countryId}`}>
           <button className={styles.readMore}>{common[lang].read_more}</button>
         </Link>
+
         <button onClick={DeleteCountry} className={styles.delete}>
           {common[lang].delete}
         </button>

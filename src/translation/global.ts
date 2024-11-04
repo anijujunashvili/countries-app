@@ -77,6 +77,7 @@ export const notFound = {
 
 export const addCountry = {
   ka: {
+    editCountry: "ქვეყნის რედაქტირება",
     addCountry: "ქვეყნის დამატება",
     name: "ქვეყნის დასახელება ქართულად",
     nameEn: "ქვეყნის დასახელება ინგლისურად",
@@ -92,6 +93,7 @@ export const addCountry = {
     },
   },
   en: {
+    editCountry: "Edit country",
     addCountry: "Add country",
     name: "Country name in Georgian",
     nameEn: "Country name in English",
@@ -109,6 +111,7 @@ export const addCountry = {
 
 export const common = {
   ka: {
+    edit: "რედაქტირება",
     sort_asc: "სორტირება ზრდადობით",
     sort_desc: "სორტირება კლებადობით",
     add_country: "ქვეყნის დამატება",
@@ -125,6 +128,7 @@ export const common = {
     add: "დამატება",
   },
   en: {
+    edit: "Edit",
     sort_asc: "Sort by asc",
     sort_desc: "Sort by desc",
     add_country: "Add country",

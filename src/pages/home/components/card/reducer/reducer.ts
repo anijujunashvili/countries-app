@@ -1,4 +1,5 @@
 import initialState from "./state.ts";
+import axios from "axios";
 
 type countryFieldsType = {
   id?: string;
@@ -35,15 +36,23 @@ type addType = {
   countryFields: countryFieldsType;
   lang: string;
 };
+type editType = {
+  countryFields: countryFieldsType;
+};
 type upvoteType = {
   id: string;
 };
 type sortType = {
   sortType: string;
 };
+type setDataType = {
+  initial: typeof initialState;
+};
 type Action =
   | { type: "upvote"; payload: upvoteType }
+  | { type: "set_data"; payload: setDataType }
   | { type: "add"; payload: addType }
+  | { type: "edit"; payload: editType }
   | { type: "sort"; payload: sortType }
   | { type: "delete"; payload: upvoteType }
   | { type: "restore"; payload: upvoteType };
@@ -52,6 +61,9 @@ const countryReducer = (
   countriesList: typeof initialState,
   action: Action,
 ): typeof initialState => {
+  if (action.type === "set_data") {
+    return action.payload.initial;
+  }
   if (action.type === "upvote") {
     const obj = countriesList;
     if (obj instanceof Array) {
@@ -71,14 +83,11 @@ const countryReducer = (
 
     if (obj && obj instanceof Array) {
       const sortedData = [...obj].sort((a, b) => {
-        //if (a.disabled !==  && b.disabled !== 0) {
         return action.payload.sortType === "asc"
           ? a.vote - b.vote
           : b.vote - a.vote;
-        // }
       });
 
-      console.log(sortedData);
       return sortedData;
     }
   }
@@ -86,46 +95,73 @@ const countryReducer = (
     const obj = action.payload.countryFields;
 
     if (obj && countriesList instanceof Array) {
-      const newCountriesList = [
+      const newCountriesList = {
         ...countriesList,
-        {
-          id: (Number(countriesList.at(-1)?.id) + 1).toString(),
-          name: {
-            ka: obj.name,
-            en: obj.nameEn,
-          },
-          capital: {
-            ka: obj.capital,
-            en: obj.capitalEn,
-          },
-          population: obj.population,
-          flag: "georgia.png",
-          image: obj.image,
-          intro: {
-            ka: `იტალიის დედაქალაქი რომი საუკუნეთა განმავლობაში დასავლური ცივილიზაციის პოლიტიკურ და რელიგიურ ცენტრს წარმოადგენდა, როგორც რომის იმპერიის დედაქალაქი და წმინდა ეპარქიის ადგილსამყოფელი. რომის იმპერიის დაცემის შემდეგ იტალიამ გაუძლო უცხოელ ხალხთა მრავალ ინვანსიას, ძირითადად ისეთი ხალხებისგან როგორებიც იყვნენ გერმანიკული ტომები — ლანგობარდები და ოსტგუთები, შემდეგ ბიზანტიელები, უფრო მოგვიანებით კი ნორმანები და ა. შ. საუკუნეების შემდეგ, იტალია საზღვაო რესპუბლიკებისა და რენესანსის სამშობლო გახდა.[7]`,
-            en: "Iyaly",
-          },
-          vote: 0,
-          disabled: 0,
-          uploaded: 1,
+        id: (Number(countriesList.at(-1)?.id) + 1).toString(),
+        name: {
+          ka: obj.name,
+          en: obj.nameEn,
         },
-      ];
-
+        capital: {
+          ka: obj.capital,
+          en: obj.capitalEn,
+        },
+        population: obj.population,
+        flag: "georgia.png",
+        image: obj.image,
+        intro: {
+          ka: `იტალიის დედაქალაქი რომი საუკუნეთა განმავლობაში დასავლური ცივილიზაციის პოლიტიკურ და რელიგიურ ცენტრს წარმოადგენდა, როგორც რომის იმპერიის დედაქალაქი და წმინდა ეპარქიის ადგილსამყოფელი. რომის იმპერიის დაცემის შემდეგ იტალიამ გაუძლო უცხოელ ხალხთა მრავალ ინვანსიას, ძირითადად ისეთი ხალხებისგან როგორებიც იყვნენ გერმანიკული ტომები — ლანგობარდები და ოსტგუთები, შემდეგ ბიზანტიელები, უფრო მოგვიანებით კი ნორმანები და ა. შ. საუკუნეების შემდეგ, იტალია საზღვაო რესპუბლიკებისა და რენესანსის სამშობლო გახდა.[7]`,
+          en: "Iyaly",
+        },
+        vote: 0,
+        disabled: 0,
+        uploaded: 1,
+      };
       return newCountriesList;
     }
   }
+  if (action.type === "edit") {
+    const obj = action.payload.countryFields;
+
+    if (obj && countriesList instanceof Array) {
+      const newCountriesList = {
+        id: obj.id,
+        name: {
+          ka: obj.name,
+          en: obj.nameEn,
+        },
+        capital: {
+          ka: obj.capital,
+          en: obj.capitalEn,
+        },
+        population: obj.population,
+        flag: "georgia.png",
+        image: obj.image,
+        intro: {
+          ka: `იტალიის დედაქალაქი რომი საუკუნეთა განმავლობაში დასავლური ცივილიზაციის პოლიტიკურ და რელიგიურ ცენტრს წარმოადგენდა, როგორც რომის იმპერიის დედაქალაქი და წმინდა ეპარქიის ადგილსამყოფელი. რომის იმპერიის დაცემის შემდეგ იტალიამ გაუძლო უცხოელ ხალხთა მრავალ ინვანსიას, ძირითადად ისეთი ხალხებისგან როგორებიც იყვნენ გერმანიკული ტომები — ლანგობარდები და ოსტგუთები, შემდეგ ბიზანტიელები, უფრო მოგვიანებით კი ნორმანები და ა. შ. საუკუნეების შემდეგ, იტალია საზღვაო რესპუბლიკებისა და რენესანსის სამშობლო გახდა.[7]`,
+          en: "Iyaly",
+        },
+        vote: 0,
+        disabled: 0,
+        uploaded: 1,
+      };
+      console.log(newCountriesList);
+      axios
+        .put(`http://localhost:3000/countriesList/${obj.id}`, newCountriesList)
+        .then(() => {})
+        .finally(() => {});
+    }
+    axios.get("http://localhost:3000/countriesList/").then((res) => {
+      return res.data;
+    });
+  }
   if (action.type === "delete") {
     if (countriesList instanceof Array) {
-      const newCountryObject = countriesList.map(
+      const newCountryObject = countriesList.filter(
         (country: counrtiesListState) => {
-          if (country.id === action.payload.id) {
-            return { ...country, disabled: 1 };
-          }
-
-          return { ...country };
+          return country.id !== action.payload.id;
         },
       );
-
       return newCountryObject;
     }
   }

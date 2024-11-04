@@ -1,0 +1,72 @@
+body.active-modal {
+  overflow-y: hidden;
+}
+div {
+  padding: 0;
+}
+.btn-modal {
+  display: block;
+  margin-left: 15px;
+  text-align: center;
+}
+
+.modal,
+.overlay {
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  position: fixed;
+  z-index: 1;
+}
+
+.modal input {
+  margin-bottom: 0px;
+}
+
+.overlay {
+  background: rgba(49, 49, 49, 0.8);
+}
+.modal-content {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  line-height: 1.4;
+  background: #f1f1f1;
+  padding: 14px 28px;
+  border-radius: 3px;
+  max-width: 600px;
+  min-width: 400px;
+  z-index: 2;
+}
+
+.close-modal {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 5px 7px;
+}
+
+.errorMsg {
+  font-size: 14px;
+  color: rgb(156, 38, 38);
+}
+.tabs {
+  padding: 15px 0 25px 0;
+  width: 100%;
+}
+.tabs span {
+  padding: 15px 30px;
+  font-weight: 500;
+  color: black;
+  cursor: pointer;
+  background-color: #fff;
+}
+.tabs .active {
+  background-color: #315a39;
+  color: #f1f1f1;
+  font-weight: 700;
+}

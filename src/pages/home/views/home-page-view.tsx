@@ -1,10 +1,11 @@
-import { lazy, useReducer } from "react";
+import { lazy, useReducer, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import initialState from "../components/card/reducer/state.ts";
 import { heroText } from "@/translation/global.ts";
 import AddCountry from "../components/add-country/add-country";
+import EditCountry from "../components/edit-country/edit-country.tsx";
 import countryReducer from "../components/card/reducer/reducer.ts";
 import { common } from "@/translation/global.ts";
+import axios from "axios";
 
 const LazyHero = lazy(() => import("@/pages/home/components/hero"));
 const LazyCard = lazy(() => import("@/pages/home/components/card/card"));
@@ -19,7 +20,15 @@ const LazyCardFooter = lazy(
 );
 
 export const HomePageView = () => {
-  const [countriesList, dispatch] = useReducer(countryReducer, initialState);
+  const [countriesList, dispatch] = useReducer(countryReducer, []);
+
+  useEffect(() => {
+    axios.get("http://localhost:3000/countriesList").then((res) => {
+      const initial = res.data;
+
+      dispatch({ type: "set_data", payload: { initial } });
+    });
+  }, []);
 
   const params = useParams();
   const lang = params.lang as string;
@@ -46,8 +55,21 @@ export const HomePageView = () => {
     dispatch({ type: "add", payload: { countryFields, lang } });
   };
 
+  const handleEditCountry = (countryFields: {
+    name: string;
+    nameEn: string;
+    capital: string;
+    capitalEn: string;
+    population: string;
+    image: string;
+  }) => {
+    dispatch({ type: "edit", payload: { countryFields } });
+  };
+
   const handleDeleteCountry = (id: string) => {
     dispatch({ type: "delete", payload: { id } });
+
+    axios.delete(`http://localhost:3000/countriesList/${id}`).then(() => {});
   };
 
   const handleDeletedCountry = (id: string) => {
@@ -117,6 +139,10 @@ export const HomePageView = () => {
               <LazyCardFooter
                 countryId={country_item.id}
                 DeleteCountry={() => handleDeleteCountry(country_item.id)}
+              />
+              <EditCountry
+                countryId={country_item.id}
+                onCountryChange={handleEditCountry}
               />
             </LazyCard>
           ))}
