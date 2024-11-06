@@ -1,4 +1,4 @@
-import { lazy, useReducer, useEffect } from "react";
+import { lazy, useReducer, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { heroText } from "@/translation/global.ts";
 import AddCountry from "../components/add-country/add-country";
@@ -6,6 +6,8 @@ import EditCountry from "../components/edit-country/edit-country.tsx";
 import countryReducer from "../components/card/reducer/reducer.ts";
 import { common } from "@/translation/global.ts";
 import axios from "axios";
+import { getCountries } from "@/api/countries/index.ts";
+import { useQuery } from "@tanstack/react-query";
 
 const LazyHero = lazy(() => import("@/pages/home/components/hero"));
 const LazyCard = lazy(() => import("@/pages/home/components/card/card"));
@@ -20,12 +22,23 @@ const LazyCardFooter = lazy(
 );
 
 export const HomePageView = () => {
+  const [modalComp, setModalComp] = useState(false);
+  //const [Editmodal, setEditModal] = useState(false);
   const [countriesList, dispatch] = useReducer(countryReducer, []);
+
+  // const { data, isLoading, isError } = useQuery({
+  //   queryKey: ["countries-list"],
+  //   queryFn: getCountries,
+  //   retry: 0,
+  // });
+
+  // console.log("country list:", data);
+  // console.log("isLoading:", isLoading);
+  // console.log("is error:", isError);
 
   useEffect(() => {
     axios.get("http://localhost:3000/countriesList").then((res) => {
       const initial = res.data;
-
       dispatch({ type: "set_data", payload: { initial } });
     });
   }, []);
@@ -52,7 +65,33 @@ export const HomePageView = () => {
     population: string;
     image: string;
   }) => {
-    dispatch({ type: "add", payload: { countryFields, lang } });
+    const new_obj = {
+      id: (Number(countriesList.at(-1)?.id) + 1).toString(),
+      name: {
+        ka: countryFields.name,
+        en: countryFields.nameEn,
+      },
+      capital: {
+        ka: countryFields.capital,
+        en: countryFields.capitalEn,
+      },
+      population: countryFields.population,
+      image: countryFields.image,
+      intro: {
+        ka: countryFields.name,
+        en: countryFields.nameEn,
+      },
+      flag: "georgia.png",
+      vote: 0,
+      disabled: 0,
+      uploaded: 0,
+    };
+
+    axios.post("http://localhost:3000/countriesList", new_obj).then(() => {
+      dispatch({ type: "add", payload: { countryFields, lang } });
+    });
+
+    setModalComp(false);
   };
 
   const handleEditCountry = (countryFields: {
@@ -62,8 +101,26 @@ export const HomePageView = () => {
     capitalEn: string;
     population: string;
     image: string;
+    id: string;
   }) => {
-    dispatch({ type: "edit", payload: { countryFields } });
+    const new_obj = {
+      name: {
+        ka: countryFields.name,
+        en: countryFields.nameEn,
+      },
+      capital: {
+        ka: countryFields.capital,
+        en: countryFields.capitalEn,
+      },
+      population: countryFields.population,
+      image: countryFields.image,
+    };
+    axios
+      .patch(`http://localhost:3000/countriesList/${countryFields.id}`, new_obj)
+      .then(() => {
+        dispatch({ type: "edit", payload: { countryFields } });
+      });
+    //setEditModal(false);
   };
 
   const handleDeleteCountry = (id: string) => {
@@ -90,10 +147,20 @@ export const HomePageView = () => {
     flag: string;
     capital: capitalType;
     disabled: number;
+    intro: nameType;
     image: string;
     uploaded: number;
     vote: number;
   };
+
+  const ChangeModal = (modal: boolean) => {
+    setModalComp(!modal);
+  };
+
+  // const ChangeEditModal = (modal: boolean) => {
+  //   setEditModal(!modal);
+  // };
+
   return (
     <>
       <LazyHero heroText={heroText[lng]} />
@@ -107,7 +174,11 @@ export const HomePageView = () => {
         <button onClick={() => handleSort("desc")}>
           {common[lng].sort_desc}
         </button>
-        <AddCountry onCountryCreate={handleNewCountry} />
+        <AddCountry
+          onCountryCreate={handleNewCountry}
+          modalComp={modalComp}
+          ChangeModal={ChangeModal}
+        />
       </div>
       <div className="container">
         {countriesList
@@ -143,6 +214,8 @@ export const HomePageView = () => {
               <EditCountry
                 countryId={country_item.id}
                 onCountryChange={handleEditCountry}
+                // modalComp={Editmodal}
+                // ChangeModal={ChangeEditModal}
               />
             </LazyCard>
           ))}

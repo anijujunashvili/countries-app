@@ -13,10 +13,16 @@ type CountryCreateProps = {
     population: string;
     image: string;
   }) => void;
+  modalComp: boolean;
+  ChangeModal: (mdl: boolean) => void;
 };
 
-const AddCountry: React.FC<CountryCreateProps> = ({ onCountryCreate }) => {
-  const [modal, setModal] = useState(false);
+const AddCountry: React.FC<CountryCreateProps> = ({
+  onCountryCreate,
+  modalComp,
+  ChangeModal,
+}) => {
+  //const [modal, setModal] = useState(false);
   const [image, setImage] = useState<string>("");
   const [tabs, setTabs] = useState({ ka: true, en: false });
 
@@ -47,10 +53,23 @@ const AddCountry: React.FC<CountryCreateProps> = ({ onCountryCreate }) => {
   // const lang = params.lang as string;
   const lng = params.lang as keyof typeof addCountry;
   const toggleModal = () => {
-    setModal(!modal);
+    setinputValues({
+      ka: {
+        name: "",
+        capital: "",
+      },
+      en: {
+        name: "",
+        capital: "",
+      },
+      population: "",
+    });
+    setImage("");
+
+    ChangeModal(modalComp);
   };
 
-  if (modal) {
+  if (modalComp) {
     document.body.classList.add("active-modal");
   } else {
     document.body.classList.remove("active-modal");
@@ -181,7 +200,7 @@ const AddCountry: React.FC<CountryCreateProps> = ({ onCountryCreate }) => {
         {addCountry[lng].addCountry}
       </button>
 
-      {modal && (
+      {modalComp && (
         <div className="modal">
           <div onClick={toggleModal} className="overlay"></div>
           <div className="modal-content">

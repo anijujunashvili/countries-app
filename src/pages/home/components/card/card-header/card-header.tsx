@@ -4,8 +4,7 @@ type CardHeaderProps = {
   uploaded: number;
 };
 const CardHeader: React.FC<CardHeaderProps> = (props) => {
-  const coverPhoto =
-    props.uploaded == 0 ? `/src/assets/${props.image}` : props.image;
+  const coverPhoto = props.image;
   return (
     <>
       <img src={coverPhoto} className={styles.cardImage} alt="card-image"></img>

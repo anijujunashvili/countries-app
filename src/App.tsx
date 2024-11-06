@@ -16,6 +16,7 @@ import NotFoundPage from "@/pages/404/views/not-found-page-view.tsx";
 import { defaultLocale, locales } from "@/translation/global";
 import { Suspense } from "react";
 import SuspenseComponent from "c/suspense/suspense";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const LangGuard: React.FC = () => {
   const params = useParams();
@@ -27,33 +28,36 @@ const LangGuard: React.FC = () => {
 
   return <Outlet />;
 };
+const queryClient = new QueryClient();
 
 const App: React.FC = () => {
   return (
     <>
-      <BrowserRouter>
-        <Routes>
-          <Route path=":lang" element={<LangGuard />}>
-            <Route element={<Layout />}>
-              <Route
-                index
-                element={
-                  <Suspense fallback={<SuspenseComponent />}>
-                    <HomePageView />
-                  </Suspense>
-                }
-              />
-              <Route path="countries/:id" element={<CountryInfoView />} />
-              <Route path="countries" element={<HomePageView />} />
-              <Route path="about" element={<AboutPageView />} />
-              <Route path="contact" element={<ContactPageView />} />
-              <Route path="otp" element={<OtpPageView />} />
-              <Route path="*" element={<NotFoundPage />} />
+      <QueryClientProvider client={queryClient}>
+        <BrowserRouter>
+          <Routes>
+            <Route path=":lang" element={<LangGuard />}>
+              <Route element={<Layout />}>
+                <Route
+                  index
+                  element={
+                    <Suspense fallback={<SuspenseComponent />}>
+                      <HomePageView />
+                    </Suspense>
+                  }
+                />
+                <Route path="countries/:id" element={<CountryInfoView />} />
+                <Route path="countries" element={<HomePageView />} />
+                <Route path="about" element={<AboutPageView />} />
+                <Route path="contact" element={<ContactPageView />} />
+                <Route path="otp" element={<OtpPageView />} />
+                <Route path="*" element={<NotFoundPage />} />
+              </Route>
             </Route>
-          </Route>
-          <Route path="*" element={<Navigate to={`/${defaultLocale}`} />} />
-        </Routes>
-      </BrowserRouter>
+            <Route path="*" element={<Navigate to={`/${defaultLocale}`} />} />
+          </Routes>
+        </BrowserRouter>
+      </QueryClientProvider>
     </>
   );
 };

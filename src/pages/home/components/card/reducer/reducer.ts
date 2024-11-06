@@ -1,5 +1,4 @@
 import initialState from "./state.ts";
-import axios from "axios";
 
 type countryFieldsType = {
   id?: string;
@@ -69,7 +68,6 @@ const countryReducer = (
     if (obj instanceof Array) {
       const newCountryObject = obj.map((country: counrtiesListState) => {
         if (country.id === action.payload.id) {
-          //return { ...country, vote: String(Number(country.vote) + 1) };
           return { ...country, vote: Number(country.vote + 1) };
         }
 
@@ -95,28 +93,31 @@ const countryReducer = (
     const obj = action.payload.countryFields;
 
     if (obj && countriesList instanceof Array) {
-      const newCountriesList = {
+      const newCountriesList = [
         ...countriesList,
-        id: (Number(countriesList.at(-1)?.id) + 1).toString(),
-        name: {
-          ka: obj.name,
-          en: obj.nameEn,
+        {
+          id: (Number(countriesList.at(-1)?.id) + 1).toString(),
+          name: {
+            ka: obj.name,
+            en: obj.nameEn,
+          },
+          capital: {
+            ka: obj.capital,
+            en: obj.capitalEn,
+          },
+          population: obj.population,
+          flag: "georgia.png",
+          image: obj.image,
+          intro: {
+            ka: `იტალიის დედაქალაქი რომი საუკუნეთა განმავლობაში დასავლური ცივილიზაციის პოლიტიკურ და რელიგიურ ცენტრს წარმოადგენდა, როგორც რომის იმპერიის დედაქალაქი და წმინდა ეპარქიის ადგილსამყოფელი. რომის იმპერიის დაცემის შემდეგ იტალიამ გაუძლო უცხოელ ხალხთა მრავალ ინვანსიას, ძირითადად ისეთი ხალხებისგან როგორებიც იყვნენ გერმანიკული ტომები — ლანგობარდები და ოსტგუთები, შემდეგ ბიზანტიელები, უფრო მოგვიანებით კი ნორმანები და ა. შ. საუკუნეების შემდეგ, იტალია საზღვაო რესპუბლიკებისა და რენესანსის სამშობლო გახდა.[7]`,
+            en: "Iyaly",
+          },
+          vote: 0,
+          disabled: 0,
+          uploaded: 0,
         },
-        capital: {
-          ka: obj.capital,
-          en: obj.capitalEn,
-        },
-        population: obj.population,
-        flag: "georgia.png",
-        image: obj.image,
-        intro: {
-          ka: `იტალიის დედაქალაქი რომი საუკუნეთა განმავლობაში დასავლური ცივილიზაციის პოლიტიკურ და რელიგიურ ცენტრს წარმოადგენდა, როგორც რომის იმპერიის დედაქალაქი და წმინდა ეპარქიის ადგილსამყოფელი. რომის იმპერიის დაცემის შემდეგ იტალიამ გაუძლო უცხოელ ხალხთა მრავალ ინვანსიას, ძირითადად ისეთი ხალხებისგან როგორებიც იყვნენ გერმანიკული ტომები — ლანგობარდები და ოსტგუთები, შემდეგ ბიზანტიელები, უფრო მოგვიანებით კი ნორმანები და ა. შ. საუკუნეების შემდეგ, იტალია საზღვაო რესპუბლიკებისა და რენესანსის სამშობლო გახდა.[7]`,
-          en: "Iyaly",
-        },
-        vote: 0,
-        disabled: 0,
-        uploaded: 1,
-      };
+      ];
+
       return newCountriesList;
     }
   }
@@ -124,36 +125,20 @@ const countryReducer = (
     const obj = action.payload.countryFields;
 
     if (obj && countriesList instanceof Array) {
-      const newCountriesList = {
-        id: obj.id,
-        name: {
-          ka: obj.name,
-          en: obj.nameEn,
-        },
-        capital: {
-          ka: obj.capital,
-          en: obj.capitalEn,
-        },
-        population: obj.population,
-        flag: "georgia.png",
-        image: obj.image,
-        intro: {
-          ka: `იტალიის დედაქალაქი რომი საუკუნეთა განმავლობაში დასავლური ცივილიზაციის პოლიტიკურ და რელიგიურ ცენტრს წარმოადგენდა, როგორც რომის იმპერიის დედაქალაქი და წმინდა ეპარქიის ადგილსამყოფელი. რომის იმპერიის დაცემის შემდეგ იტალიამ გაუძლო უცხოელ ხალხთა მრავალ ინვანსიას, ძირითადად ისეთი ხალხებისგან როგორებიც იყვნენ გერმანიკული ტომები — ლანგობარდები და ოსტგუთები, შემდეგ ბიზანტიელები, უფრო მოგვიანებით კი ნორმანები და ა. შ. საუკუნეების შემდეგ, იტალია საზღვაო რესპუბლიკებისა და რენესანსის სამშობლო გახდა.[7]`,
-          en: "Iyaly",
-        },
-        vote: 0,
-        disabled: 0,
-        uploaded: 1,
-      };
-      console.log(newCountriesList);
-      axios
-        .put(`http://localhost:3000/countriesList/${obj.id}`, newCountriesList)
-        .then(() => {})
-        .finally(() => {});
+      const newCountriesList = countriesList.map((country) => {
+        if (country.id == obj.id) {
+          return {
+            ...country,
+            name: { ka: obj.name, en: obj.nameEn },
+            capital: { ka: obj.capital, en: obj.capitalEn },
+            image: obj.image,
+            population: obj.population,
+          };
+        }
+        return country;
+      });
+      return newCountriesList;
     }
-    axios.get("http://localhost:3000/countriesList/").then((res) => {
-      return res.data;
-    });
   }
   if (action.type === "delete") {
     if (countriesList instanceof Array) {
