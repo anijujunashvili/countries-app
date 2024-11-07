@@ -15,12 +15,14 @@ type CountryCreateProps = {
   }) => void;
   modalComp: boolean;
   ChangeModal: (mdl: boolean) => void;
+  addLoading: boolean;
 };
 
 const AddCountry: React.FC<CountryCreateProps> = ({
   onCountryCreate,
   modalComp,
   ChangeModal,
+  addLoading,
 }) => {
   //const [modal, setModal] = useState(false);
   const [image, setImage] = useState<string>("");
@@ -205,6 +207,7 @@ const AddCountry: React.FC<CountryCreateProps> = ({
           <div onClick={toggleModal} className="overlay"></div>
           <div className="modal-content">
             <h2>{addCountry[lng].addCountry}</h2>
+            {addLoading && "მიმდინარეობს ქვეყნის დამატება..."}
             <div className="tabs">
               <span
                 onClick={() => handleTabsChange("ka")}

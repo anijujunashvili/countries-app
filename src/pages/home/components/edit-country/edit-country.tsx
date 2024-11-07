@@ -16,11 +16,13 @@ type CountryChangeProps = {
     id: string;
   }) => void;
   countryId: string;
+  Updating: boolean;
 };
 
 const EditCountry: React.FC<CountryChangeProps> = ({
   onCountryChange,
   countryId,
+  Updating,
 }) => {
   const [modal, setModal] = useState(false);
   const [image, setImage] = useState<string>("");
@@ -296,7 +298,14 @@ const EditCountry: React.FC<CountryChangeProps> = ({
                   onChange={handleUpload}
                 />
               </p>
-              <button type="submit">{common[lng].edit}</button>
+              {Updating ? (
+                <button type="submit" disabled style={{ opacity: "0.5" }}>
+                  {common[lng].edit}
+                </button>
+              ) : (
+                <button type="submit">{common[lng].edit}</button>
+              )}
+              <input type="hidden" name="vote" value="0" />
             </form>
             <button className="close-modal" onClick={toggleModal}>
               X

@@ -1,13 +1,18 @@
-import { lazy, useReducer, useEffect, useState } from "react";
+import { lazy, useState } from "react";
 import { useParams } from "react-router-dom";
 import { heroText } from "@/translation/global.ts";
 import AddCountry from "../components/add-country/add-country";
 import EditCountry from "../components/edit-country/edit-country.tsx";
-import countryReducer from "../components/card/reducer/reducer.ts";
+//import countryReducer from "../components/card/reducer/reducer.ts";
 import { common } from "@/translation/global.ts";
-import axios from "axios";
-import { getCountries } from "@/api/countries/index.ts";
-import { useQuery } from "@tanstack/react-query";
+//import axios from "axios";
+import {
+  deleteCountry,
+  getCountries,
+  updateCountry,
+  addCountry,
+} from "@/api/countries/index.ts";
+import { useQuery, useMutation } from "@tanstack/react-query";
 
 const LazyHero = lazy(() => import("@/pages/home/components/hero"));
 const LazyCard = lazy(() => import("@/pages/home/components/card/card"));
@@ -21,40 +26,94 @@ const LazyCardFooter = lazy(
   () => import("@/pages/home/components/card/card-footer"),
 );
 
+type nameType = {
+  ka: string;
+  en: string;
+};
+type capitalType = {
+  ka: string;
+  en: string;
+};
+type Countries = {
+  id: string;
+  name: nameType;
+  population: string;
+  flag: string;
+  capital: capitalType;
+  disabled: number;
+  intro: nameType;
+  image: string;
+  uploaded: number;
+  vote: number;
+};
+
 export const HomePageView = () => {
   const [modalComp, setModalComp] = useState(false);
   //const [Editmodal, setEditModal] = useState(false);
-  const [countriesList, dispatch] = useReducer(countryReducer, []);
+  //const [countriesList, dispatch] = useReducer(countryReducer, []);
 
-  // const { data, isLoading, isError } = useQuery({
-  //   queryKey: ["countries-list"],
-  //   queryFn: getCountries,
-  //   retry: 0,
-  // });
+  const {
+    data: countriesList,
+    isLoading: getLoading,
+    isError: getIserror,
+    refetch: getRefetch,
+  } = useQuery({
+    queryKey: ["countries-list"],
+    queryFn: getCountries,
+    gcTime: 1000 * 5,
+    staleTime: 1000 * 5,
+    retry: 0,
+    refetchOnWindowFocus: false,
+  });
 
-  // console.log("country list:", data);
-  // console.log("isLoading:", isLoading);
-  // console.log("is error:", isError);
+  const {
+    mutate: deleteMutation,
+    isPending: isDeleting,
+    isError: isDeleteError,
+  } = useMutation({ mutationFn: deleteCountry });
 
-  useEffect(() => {
-    axios.get("http://localhost:3000/countriesList").then((res) => {
-      const initial = res.data;
-      dispatch({ type: "set_data", payload: { initial } });
-    });
-  }, []);
+  const {
+    mutate: updateMutation,
+    isPending: isUpdating,
+    isError: isUpdateError,
+  } = useMutation({ mutationFn: updateCountry });
+
+  const {
+    mutate: addMutation,
+    isPending: isAdding,
+    isError: isAddError,
+  } = useMutation({ mutationFn: addCountry });
 
   const params = useParams();
-  const lang = params.lang as string;
+  // const lang = params.lang as string;
   const lng = params.lang as keyof typeof common;
 
   const handleVoteUp = (id: string) => {
     if (id) {
-      dispatch({ type: "upvote", payload: { id } });
+      const newVote = countriesList?.find((c: Countries) => {
+        if (c.id == id) {
+          return c;
+        }
+        return null;
+      });
+
+      updateMutation(
+        {
+          id: id,
+          payload: {
+            vote: Number(newVote?.vote) + 1,
+          },
+        },
+        { onSuccess: () => getRefetch() },
+      );
     }
   };
 
   const handleSort = (sortType: "asc" | "desc") => {
-    dispatch({ type: "sort", payload: { sortType } });
+    countriesList?.sort((a: Countries, b: Countries) => {
+      return sortType == "asc" ? a.vote - b.vote : b.vote - a.vote;
+    });
+    // dispatch({ type: "sort", payload: { sortType } });
   };
 
   const handleNewCountry = (countryFields: {
@@ -65,33 +124,53 @@ export const HomePageView = () => {
     population: string;
     image: string;
   }) => {
-    const new_obj = {
-      id: (Number(countriesList.at(-1)?.id) + 1).toString(),
-      name: {
-        ka: countryFields.name,
-        en: countryFields.nameEn,
+    // const new_obj = {
+    //   id: (Number(countriesList?.at(-1)?.id) + 1).toString(),
+    //   name: {
+    //     ka: countryFields.name,
+    //     en: countryFields.nameEn,
+    //   },
+    //   capital: {
+    //     ka: countryFields.capital,
+    //     en: countryFields.capitalEn,
+    //   },
+    //   population: countryFields.population,
+    //   image: countryFields.image,
+    //   intro: {
+    //     ka: countryFields.name,
+    //     en: countryFields.nameEn,
+    //   },
+    //   flag: "georgia.png",
+    //   vote: 0,
+    //   disabled: 0,
+    //   uploaded: 0,
+    // };
+    addMutation(
+      {
+        payload: {
+          id: (Number(countriesList?.at(-1)?.id) + 1).toString(),
+          name: {
+            ka: countryFields.name,
+            en: countryFields.nameEn,
+          },
+          capital: {
+            ka: countryFields.capital,
+            en: countryFields.capitalEn,
+          },
+          population: countryFields.population,
+          image: countryFields.image,
+          intro: {
+            ka: countryFields.name,
+            en: countryFields.nameEn,
+          },
+          flag: "georgia.png",
+          vote: 0,
+          disabled: 0,
+          uploaded: 0,
+        },
       },
-      capital: {
-        ka: countryFields.capital,
-        en: countryFields.capitalEn,
-      },
-      population: countryFields.population,
-      image: countryFields.image,
-      intro: {
-        ka: countryFields.name,
-        en: countryFields.nameEn,
-      },
-      flag: "georgia.png",
-      vote: 0,
-      disabled: 0,
-      uploaded: 0,
-    };
-
-    axios.post("http://localhost:3000/countriesList", new_obj).then(() => {
-      dispatch({ type: "add", payload: { countryFields, lang } });
-    });
-
-    setModalComp(false);
+      { onSuccess: () => getRefetch() },
+    );
   };
 
   const handleEditCountry = (countryFields: {
@@ -103,54 +182,29 @@ export const HomePageView = () => {
     image: string;
     id: string;
   }) => {
-    const new_obj = {
-      name: {
-        ka: countryFields.name,
-        en: countryFields.nameEn,
+    updateMutation(
+      {
+        id: countryFields.id,
+        payload: {
+          name: {
+            ka: countryFields.name,
+            en: countryFields.nameEn,
+          },
+          capital: {
+            ka: countryFields.capital,
+            en: countryFields.capitalEn,
+          },
+          population: countryFields.population,
+          image: countryFields.image,
+          vote: 0,
+        },
       },
-      capital: {
-        ka: countryFields.capital,
-        en: countryFields.capitalEn,
-      },
-      population: countryFields.population,
-      image: countryFields.image,
-    };
-    axios
-      .patch(`http://localhost:3000/countriesList/${countryFields.id}`, new_obj)
-      .then(() => {
-        dispatch({ type: "edit", payload: { countryFields } });
-      });
-    //setEditModal(false);
+      { onSuccess: () => getRefetch() },
+    );
   };
 
   const handleDeleteCountry = (id: string) => {
-    dispatch({ type: "delete", payload: { id } });
-
-    axios.delete(`http://localhost:3000/countriesList/${id}`).then(() => {});
-  };
-
-  const handleDeletedCountry = (id: string) => {
-    dispatch({ type: "restore", payload: { id } });
-  };
-  type nameType = {
-    ka: string;
-    en: string;
-  };
-  type capitalType = {
-    ka: string;
-    en: string;
-  };
-  type Countries = {
-    id: string;
-    name: nameType;
-    population: string;
-    flag: string;
-    capital: capitalType;
-    disabled: number;
-    intro: nameType;
-    image: string;
-    uploaded: number;
-    vote: number;
+    deleteMutation({ id: id }, { onSuccess: () => getRefetch() });
   };
 
   const ChangeModal = (modal: boolean) => {
@@ -161,8 +215,19 @@ export const HomePageView = () => {
   //   setEditModal(!modal);
   // };
 
+  if (getLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (getIserror) {
+    return <div>Error</div>;
+  }
   return (
     <>
+      {isDeleting ? "მიმდინარეობას ქვეყნის წაშლა" : ""}
+      {isDeleteError ? "ვერ მოხერხდა ქვენის წაშლა" : ""}
+      {isAddError ? "ვერ მოხერხდა ქვეყნის დამატება" : ""}
+      {isUpdateError ? "სამწუხაროდ ვერ მოხერხდა ქვეყნის რედაქტირება" : ""}
       <LazyHero heroText={heroText[lng]} />
       <div className="container">
         <button
@@ -178,47 +243,33 @@ export const HomePageView = () => {
           onCountryCreate={handleNewCountry}
           modalComp={modalComp}
           ChangeModal={ChangeModal}
+          addLoading={isAdding}
         />
       </div>
       <div className="container">
-        {countriesList
-          .sort((a: Countries, b: Countries) => {
-            return a.disabled - b.disabled;
-          })
-          .map((country_item: Countries) => (
-            <LazyCard key={country_item.id}>
-              {country_item.disabled ? (
-                <div className="disabled">
-                  <div
-                    className="restore"
-                    onClick={() => handleDeletedCountry(country_item.id)}
-                  >
-                    {common[lng].restore}
-                  </div>
-                </div>
-              ) : (
-                ""
-              )}
-              <LazyCardHeader
-                image={country_item.image}
-                uploaded={country_item.uploaded}
-              />
-              <LazyCardContent
-                {...country_item}
-                onUpVote={() => handleVoteUp(country_item.id)}
-              />
-              <LazyCardFooter
-                countryId={country_item.id}
-                DeleteCountry={() => handleDeleteCountry(country_item.id)}
-              />
-              <EditCountry
-                countryId={country_item.id}
-                onCountryChange={handleEditCountry}
-                // modalComp={Editmodal}
-                // ChangeModal={ChangeEditModal}
-              />
-            </LazyCard>
-          ))}
+        {countriesList?.map((country_item: Countries) => (
+          <LazyCard key={country_item.id}>
+            <LazyCardHeader
+              image={country_item.image}
+              uploaded={country_item.uploaded}
+            />
+            <LazyCardContent
+              {...country_item}
+              onUpVote={() => handleVoteUp(country_item.id)}
+            />
+            <LazyCardFooter
+              countryId={country_item.id}
+              DeleteCountry={() => handleDeleteCountry(country_item.id)}
+            />
+            <EditCountry
+              countryId={country_item.id}
+              onCountryChange={handleEditCountry}
+              Updating={isUpdating}
+              // modalComp={Editmodal}
+              // ChangeModal={ChangeEditModal}
+            />
+          </LazyCard>
+        ))}
       </div>
     </>
   );
