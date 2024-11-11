@@ -17,6 +17,8 @@ import { defaultLocale, locales } from "@/translation/global";
 import { Suspense } from "react";
 import SuspenseComponent from "c/suspense/suspense";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import CountriesBlog from "@/pages/blog/blog";
 
 const LangGuard: React.FC = () => {
   const params = useParams();
@@ -57,6 +59,7 @@ const App: React.FC = () => {
             <Route path="*" element={<Navigate to={`/${defaultLocale}`} />} />
           </Routes>
         </BrowserRouter>
+        <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
     </>
   );

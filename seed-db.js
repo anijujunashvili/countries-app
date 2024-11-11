@@ -1,29 +1,30 @@
 import axios from "axios";
 
-axios.get("https://restcountries.com/v3.1/all").then((res) => {
-  const obj = {};
+axios.get("https://jsonplaceholder.typicode.com/photos").then((res) => {
+  var obj = [];
   for (let i = 0; i < res.data.length; i++) {
-    obj[i] = {
-      id: i,
+    const name = res.data[i].title.split(" ");
+    obj.push({
+      id: res.data[i].id,
       name: {
-        ka: res.data[i].name.common,
-        en: res.data[i].name.common,
+        ka: name[0],
+        en: name[0],
       },
       capital: {
-        ka: res.data[i].capital,
-        en: res.data[i].capital,
+        ka: name[1],
+        en: name[1],
       },
       intro: {
-        ka: res.data[i].status,
-        en: res.data[i].status,
+        ka: res.data[i].title,
+        en: res.data[i].title,
       },
-      population: res.data[i].population,
-      flag: res.data[i].flags.png,
-      image: "",
+      population: res.data[i].id * 1000000,
+      flag: "georgia.png",
+      image: res.data[i].thumbnailUrl,
       vote: 0,
       disabled: 0,
       uploaded: 0,
-    };
+    });
   }
 
   axios.post("http://localhost:3000/countries", obj).then((res) => {

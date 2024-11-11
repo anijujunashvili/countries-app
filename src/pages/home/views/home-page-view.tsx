@@ -1,70 +1,69 @@
-import { lazy, useState } from "react";
-import { useParams } from "react-router-dom";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { lazy, useEffect, useState, useRef } from "react";
+import { useParams, Link, useSearchParams } from "react-router-dom";
 import { heroText } from "@/translation/global.ts";
 import AddCountry from "../components/add-country/add-country";
 import EditCountry from "../components/edit-country/edit-country.tsx";
-//import countryReducer from "../components/card/reducer/reducer.ts";
 import { common } from "@/translation/global.ts";
-//import axios from "axios";
 import {
   deleteCountry,
-  getCountries,
   updateCountry,
   addCountry,
+  fetchServerPage,
 } from "@/api/countries/index.ts";
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useMutation, useInfiniteQuery } from "@tanstack/react-query";
+import { Countries, newCountries } from "../countries.type.ts";
+
+import { useVirtualizer } from "@tanstack/react-virtual";
+// import Card from "../components/card/card/card.tsx";
 
 const LazyHero = lazy(() => import("@/pages/home/components/hero"));
-const LazyCard = lazy(() => import("@/pages/home/components/card/card"));
 const LazyCardContent = lazy(
   () => import("@/pages/home/components/card/card-content"),
 );
-const LazyCardHeader = lazy(
-  () => import("@/pages/home/components/card/card-header"),
-);
+// const LazyCardHeader = lazy(
+//   () => import("@/pages/home/components/card/card-header"),
+// );
 const LazyCardFooter = lazy(
   () => import("@/pages/home/components/card/card-footer"),
 );
 
-type nameType = {
-  ka: string;
-  en: string;
-};
-type capitalType = {
-  ka: string;
-  en: string;
-};
-type Countries = {
-  id: string;
-  name: nameType;
-  population: string;
-  flag: string;
-  capital: capitalType;
-  disabled: number;
-  intro: nameType;
-  image: string;
-  uploaded: number;
-  vote: number;
-};
-
 export const HomePageView = () => {
   const [modalComp, setModalComp] = useState(false);
-  //const [Editmodal, setEditModal] = useState(false);
-  //const [countriesList, dispatch] = useReducer(countryReducer, []);
+  const [List, setList] = useState<newCountries[]>();
+  const [searchParams] = useSearchParams();
+  console.log(List);
+  const sort = searchParams.get("sort");
 
   const {
+    status,
     data: countriesList,
-    isLoading: getLoading,
-    isError: getIserror,
+    error,
+    isFetching,
+    isFetchingNextPage,
+    fetchNextPage,
+    hasNextPage,
     refetch: getRefetch,
-  } = useQuery({
+  } = useInfiniteQuery({
     queryKey: ["countries-list"],
-    queryFn: getCountries,
-    gcTime: 1000 * 5,
-    staleTime: 1000 * 5,
-    retry: 0,
-    refetchOnWindowFocus: false,
+    queryFn: (ctx) => fetchServerPage(10, ctx.pageParam, sort as string),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage) => {
+      return lastPage.nextOffset;
+    },
   });
+
+  const allRows = countriesList
+    ? countriesList.pages.flatMap((d) => d.rows)
+    : [];
+
+  useEffect(() => {
+    getRefetch();
+    if (countriesList) {
+      // @ts-expect-error after
+      setList(countriesList);
+    }
+  }, [countriesList, sort]);
 
   const {
     mutate: deleteMutation,
@@ -85,12 +84,11 @@ export const HomePageView = () => {
   } = useMutation({ mutationFn: addCountry });
 
   const params = useParams();
-  // const lang = params.lang as string;
   const lng = params.lang as keyof typeof common;
 
   const handleVoteUp = (id: string) => {
     if (id) {
-      const newVote = countriesList?.find((c: Countries) => {
+      const newVote = allRows.find((c: Countries) => {
         if (c.id == id) {
           return c;
         }
@@ -109,13 +107,6 @@ export const HomePageView = () => {
     }
   };
 
-  const handleSort = (sortType: "asc" | "desc") => {
-    countriesList?.sort((a: Countries, b: Countries) => {
-      return sortType == "asc" ? a.vote - b.vote : b.vote - a.vote;
-    });
-    // dispatch({ type: "sort", payload: { sortType } });
-  };
-
   const handleNewCountry = (countryFields: {
     name: string;
     nameEn: string;
@@ -124,31 +115,10 @@ export const HomePageView = () => {
     population: string;
     image: string;
   }) => {
-    // const new_obj = {
-    //   id: (Number(countriesList?.at(-1)?.id) + 1).toString(),
-    //   name: {
-    //     ka: countryFields.name,
-    //     en: countryFields.nameEn,
-    //   },
-    //   capital: {
-    //     ka: countryFields.capital,
-    //     en: countryFields.capitalEn,
-    //   },
-    //   population: countryFields.population,
-    //   image: countryFields.image,
-    //   intro: {
-    //     ka: countryFields.name,
-    //     en: countryFields.nameEn,
-    //   },
-    //   flag: "georgia.png",
-    //   vote: 0,
-    //   disabled: 0,
-    //   uploaded: 0,
-    // };
     addMutation(
       {
         payload: {
-          id: (Number(countriesList?.at(-1)?.id) + 1).toString(),
+          id: (Number(allRows?.at(-1)?.id) + 1).toString(),
           name: {
             ka: countryFields.name,
             en: countryFields.nameEn,
@@ -210,18 +180,37 @@ export const HomePageView = () => {
   const ChangeModal = (modal: boolean) => {
     setModalComp(!modal);
   };
+  const parentElement = useRef(null);
+  const rowVirtualizer = useVirtualizer({
+    count: hasNextPage ? allRows.length + 1 : allRows.length,
+    getScrollElement: () => parentElement.current,
+    estimateSize: () => 230,
+    paddingStart: 20,
+    paddingEnd: 20,
+  });
+  const items = rowVirtualizer.getVirtualItems();
 
-  // const ChangeEditModal = (modal: boolean) => {
-  //   setEditModal(!modal);
-  // };
+  useEffect(() => {
+    const [lastItem] = [...rowVirtualizer.getVirtualItems()].reverse();
 
-  if (getLoading) {
-    return <div>Loading...</div>;
-  }
+    if (!lastItem) {
+      return;
+    }
 
-  if (getIserror) {
-    return <div>Error</div>;
-  }
+    if (
+      lastItem.index >= allRows.length - 1 &&
+      hasNextPage &&
+      !isFetchingNextPage
+    ) {
+      fetchNextPage();
+    }
+  }, [
+    hasNextPage,
+    fetchNextPage,
+    allRows.length,
+    isFetchingNextPage,
+    rowVirtualizer.getVirtualItems(),
+  ]);
   return (
     <>
       {isDeleting ? "მიმდინარეობას ქვეყნის წაშლა" : ""}
@@ -229,16 +218,17 @@ export const HomePageView = () => {
       {isAddError ? "ვერ მოხერხდა ქვეყნის დამატება" : ""}
       {isUpdateError ? "სამწუხაროდ ვერ მოხერხდა ქვეყნის რედაქტირება" : ""}
       <LazyHero heroText={heroText[lng]} />
-      <div className="container">
-        <button
-          onClick={() => handleSort("asc")}
-          style={{ marginRight: "15px" }}
-        >
-          {common[lng].sort_asc}
-        </button>
-        <button onClick={() => handleSort("desc")}>
-          {common[lng].sort_desc}
-        </button>
+
+      <div className="container ">
+        <Link to={`?sort=asc`}>
+          <button style={{ marginRight: "15px" }}>
+            {common[lng].sort_asc}
+          </button>
+        </Link>
+        <Link to={`?sort=desc`}>
+          <button>{common[lng].sort_desc}</button>
+        </Link>
+
         <AddCountry
           onCountryCreate={handleNewCountry}
           modalComp={modalComp}
@@ -246,30 +236,88 @@ export const HomePageView = () => {
           addLoading={isAdding}
         />
       </div>
-      <div className="container">
-        {countriesList?.map((country_item: Countries) => (
-          <LazyCard key={country_item.id}>
-            <LazyCardHeader
-              image={country_item.image}
-              uploaded={country_item.uploaded}
-            />
-            <LazyCardContent
-              {...country_item}
-              onUpVote={() => handleVoteUp(country_item.id)}
-            />
-            <LazyCardFooter
-              countryId={country_item.id}
-              DeleteCountry={() => handleDeleteCountry(country_item.id)}
-            />
-            <EditCountry
-              countryId={country_item.id}
-              onCountryChange={handleEditCountry}
-              Updating={isUpdating}
-              // modalComp={Editmodal}
-              // ChangeModal={ChangeEditModal}
-            />
-          </LazyCard>
-        ))}
+      {status === "pending" ? (
+        <p>Loading...</p>
+      ) : status === "error" ? (
+        <span>Error: {error.message}</span>
+      ) : (
+        <div
+          className="container card-list-container"
+          style={{ width: "100%", height: "600px", overflowY: "scroll" }}
+          ref={parentElement}
+        >
+          <div
+            style={{
+              width: "85%",
+              marginLeft: "auto",
+              marginRight: "auto",
+              position: "relative",
+              height: `${rowVirtualizer.getTotalSize()}px`,
+            }}
+          >
+            {items.map((item) => {
+              const isLoaderRow = item.index > allRows.length - 1;
+              const country = allRows[item.index];
+              return (
+                <div
+                  key={item.key}
+                  ref={rowVirtualizer.measureElement}
+                  data-index={item.index}
+                  style={{
+                    position: "absolute",
+                    marginBottom: "20px",
+                    top: 0,
+                    left: 0,
+                    width: "100%",
+                    height: `${item.size}px`,
+                    transform: `translateY(${item.start}px)`,
+                  }}
+                >
+                  {isLoaderRow ? (
+                    hasNextPage ? (
+                      "Loading more..."
+                    ) : (
+                      "Nothing more to load"
+                    )
+                  ) : (
+                    <div
+                      style={{ width: "100%", height: "auto", display: "flex" }}
+                      className="card"
+                    >
+                      <img
+                        src={country?.image}
+                        style={{
+                          width: "300px",
+                          height: "200px",
+                          marginRight: "15px",
+                          border: "1px solid",
+                        }}
+                      />
+                      <LazyCardContent
+                        {...country}
+                        onUpVote={() => handleVoteUp(country?.id)}
+                      />
+                      <LazyCardFooter
+                        countryId={country?.id}
+                        DeleteCountry={() => handleDeleteCountry(country?.id)}
+                      />
+                      <EditCountry
+                        countryId={country?.id}
+                        onCountryChange={handleEditCountry}
+                        Updating={isUpdating}
+                        // modalComp={Editmodal}
+                        // ChangeModal={ChangeEditModal}
+                      />
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+      <div>
+        {isFetching && !isFetchingNextPage ? "Background Updating..." : null}
       </div>
     </>
   );

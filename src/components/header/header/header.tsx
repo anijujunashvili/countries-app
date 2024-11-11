@@ -44,9 +44,6 @@ export const Header = () => {
               OTP
             </NavLink>
           </li>
-          <li>
-            <a href="#blog">{mainMenu[lang].blog}</a>
-          </li>
 
           <li>
             <a href="#booknow">{mainMenu[lang].book}</a>

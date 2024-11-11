@@ -6,7 +6,7 @@ body {
   margin: 0;
 }
 .container {
-  width: 85%;
+  width: 50%;
   margin-left: auto;
   margin-right: auto;
   display: flex;
@@ -14,6 +14,10 @@ body {
   flex-direction: row;
   align-items: center;
   margin-top: 30px;
+}
+.card-list-container {
+  flex-direction: column;
+  align-items: start;
 }
 .disabled {
   position: absolute;
@@ -43,4 +47,71 @@ body {
 }
 .restore:hover {
   background-color: #315a39;
+}
+.card {
+  display: flex;
+  flex-direction: row;
+  align-items: start;
+  border: 1px solid #eeebeb;
+}
+
+.card-image {
+  height: 180px;
+}
+
+.country-name {
+  color: black;
+  font-size: 24px;
+  font-weight: 700;
+  text-align: left;
+}
+
+.card-context {
+  padding-left: 15px;
+  width: 50%;
+}
+.card-context p {
+  margin: 5px;
+  text-align: left;
+}
+.bold {
+  font-weight: 700;
+}
+.flag {
+  width: 50px;
+  margin: 10px;
+  border: 1px solid #e1dddd;
+}
+.vote {
+  padding-left: 10px;
+}
+
+.cardFooter {
+  padding: 10px 15px;
+  display: flex;
+  justify-content: end;
+  align-items: end;
+  width: 20%;
+}
+
+.readMore {
+  padding: 15px 30px;
+  background-color: #7a9f79;
+  border-radius: 4px;
+  border: 0px;
+  cursor: pointer;
+  color: #fff;
+  transition: all 0.6s ease;
+  font-weight: 700;
+}
+
+.readMore:hover {
+  background-color: #315a39;
+}
+.delete {
+  background-color: rgb(156, 38, 38);
+  margin-left: 15px;
+}
+.delete:hover {
+  background-color: rgb(98, 10, 10);
 }

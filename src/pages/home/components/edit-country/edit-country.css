@@ -40,7 +40,7 @@ div {
   border-radius: 3px;
   max-width: 600px;
   min-width: 400px;
-  z-index: 2;
+  z-index: 80;
 }
 
 .close-modal {

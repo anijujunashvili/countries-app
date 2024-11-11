@@ -25,9 +25,21 @@ const CardContent: React.FC<{
 
   return (
     <>
-      <div className={styles.headline}>
-        <span className={styles.countryName}>{name[lang]}</span>
-        <span>
+      <div className="card-context">
+        <p className="country-name">{name[lang]}</p>
+        <p className="population">
+          {common[lng].population}: <span className="bold">{population}</span>
+        </p>
+        <p className="capital">
+          {common[lng].capital}: <span className="bold">{capital[lang]}</span>
+        </p>
+        <img
+          src={`/src/assets/${flag}`}
+          alt="flag"
+          title="Flag"
+          className="flag"
+        />
+        <div className="vote">
           <img
             src={likeIcon}
             onClick={onUpVote}
@@ -40,14 +52,7 @@ const CardContent: React.FC<{
             }}
           />
           {vote}
-        </span>
-        <img src={`/src/assets/${flag}`} alt="flag" title="Flag"></img>
-      </div>
-      <div className={styles.population}>
-        {common[lng].population}: <span>{population}</span>
-      </div>
-      <div className={styles.capital}>
-        {common[lng].capital}: <span>{capital[lang]}</span>
+        </div>
       </div>
     </>
   );

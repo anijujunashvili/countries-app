@@ -13,12 +13,12 @@ const CardFooter: React.FC<CardFooterProps> = ({
   const lang = params.lang as keyof typeof common;
   return (
     <>
-      <div className={styles.cardFooter}>
+      <div className="cardFooter">
         <Link to={`/${lang}/countries/${countryId}`}>
-          <button className={styles.readMore}>{common[lang].read_more}</button>
+          <button className="read-more">{common[lang].read_more}</button>
         </Link>
 
-        <button onClick={DeleteCountry} className={styles.delete}>
+        <button onClick={DeleteCountry} className="delete">
           {common[lang].delete}
         </button>
       </div>

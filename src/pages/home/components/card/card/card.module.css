@@ -9,7 +9,6 @@
   cursor: pointer;
   transition: all 1s ease;
   color: #626060;
-  position: relative;
 }
 
 .card:hover {

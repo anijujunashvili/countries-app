@@ -7,7 +7,9 @@ const CardHeader: React.FC<CardHeaderProps> = (props) => {
   const coverPhoto = props.image;
   return (
     <>
-      <img src={coverPhoto} className={styles.cardImage} alt="card-image"></img>
+      <div style={{}}>
+        <img src={coverPhoto} className="card-image" alt="card-image"></img>
+      </div>
     </>
   );
 };

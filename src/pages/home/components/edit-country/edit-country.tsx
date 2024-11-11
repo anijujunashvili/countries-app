@@ -208,7 +208,7 @@ const EditCountry: React.FC<CountryChangeProps> = ({
   return (
     <>
       <span onClick={toggleModal} className="btn-modal">
-        {common[lng].edit}
+        <img src="/src/assets/edit.svg" width="50" title={common[lng].edit} />
       </span>
 
       {modal && (
